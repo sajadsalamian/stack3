@@ -125,6 +125,7 @@ function Index() {
           <p>User Details:</p>
           {user ? (
             <div>
+              <p>user: {JSON.stringify(user)}</p>
               <p>username : {user.username}</p>
               <p>first name : {user.first_name} - {user.last_name}</p>
               <p>id : {user.id}</p>
