@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import { Toast } from "../components/Layouts/Main/Helper";
 import Button from "../components/Elements/Button";
 import Main, { HeadMeta } from "../components/Layouts/Main/Main";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
+import {
+  retrieveLaunchParams,
+  useLaunchParams,
+} from "@telegram-apps/sdk-react";
 
 function Index() {
   const [isTelegram, setIsTelegram] = useState(false);
   const [launchParams, setLaunchParams] = useState(null);
+  const [user, setUser] = useState(null);
 
   const [account, setAccount] = useState(null);
   const [signature, setSignature] = useState("");
@@ -23,18 +27,23 @@ function Index() {
   useEffect(() => {
     console.log("is uyux connect?", ethereum.isConnected());
 
-    const isTelegramApp = window.Telegram && window.Telegram.WebApp;
-    setIsTelegram(!!isTelegramApp); // Check URL parameters for "tgWebApp"
+    // const isTelegramApp = window.Telegram && window.Telegram.WebApp;
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("tgWebApp") === "true") {
       setIsTelegram(true);
+      const { initDataRaw, initData } = retrieveLaunchParams();
+      setUser(initData?.user);
+      console.log("asdasdasdsa", initData?.user);
+
       const lp = useLaunchParams();
       setLaunchParams(lp);
       const initDataResult = lp.initData;
-      const user = initDataResult?.user as AuthUser | undefined;
-      console.log("initDataResult", initDataResult);
+      const user = initDataResult?.user;
+      console.log("initDataResult", user);
+    } else {
+      setIsTelegram(false);
     }
-    console.log("isTelegram", isTelegram);
   }, []);
 
   const ToggleConnection = () => {
@@ -115,13 +124,8 @@ function Index() {
     <Main>
       <HeadMeta title="Welcome to game" />
       <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
-        <p>
-          {launchParams ? (
-            <h1>Welcome, {launchParams.user?.username || "Guest"}</h1>
-          ) : (
-            <h1>Loading...</h1>
-          )}
-        </p>
+        <div>is Telegram : {isTelegram ? "true" : "false"}</div>
+        <p>user : {user ? user.username : "not Defined"}</p>
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
           onClick={ToggleConnection}
