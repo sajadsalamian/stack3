@@ -2,11 +2,9 @@ import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 import { useEffect, useState } from "react";
 import { Toast } from "../Layouts/Main/Helper";
 import Button from "../Elements/Button";
-import Main from "../Layouts/Main/Main";
-import useDocumentTitle from "../Elements/useDocumentTitle";
+import Main, { HeadMeta } from "../Layouts/Main/Main";
 
 function Index() {
-  useDocumentTitle("Index")
   const [account, setAccount] = useState(null);
   const [signature, setSignature] = useState("");
 
@@ -98,6 +96,7 @@ function Index() {
 
   return (
     <Main>
+      <HeadMeta title="Welcome to game" />
       <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
