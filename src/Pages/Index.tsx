@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { Toast } from "../components/Layouts/Main/Helper";
 import Button from "../components/Elements/Button";
 import Main, { HeadMeta } from "../components/Layouts/Main/Main";
+import { useLaunchParams } from "@telegram-apps/sdk-react";
 
 function Index() {
+  const [isTelegram, setIsTelegram] = useState(false);
+  const [launchParams, setLaunchParams] = useState(null);
+
   const [account, setAccount] = useState(null);
   const [signature, setSignature] = useState("");
 
@@ -18,6 +22,20 @@ function Index() {
 
   useEffect(() => {
     console.log("is uyux connect?", ethereum.isConnected());
+
+    const isTelegramApp = window.Telegram && window.Telegram.WebApp;
+    setIsTelegram(!!isTelegramApp); // Check URL parameters for "tgWebApp"
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("tgWebApp") === "true") {
+      setIsTelegram(true);
+      const lp = useLaunchParams();
+      setLaunchParams(lp);
+      const initDataResult = lp.initData;
+      const user = initDataResult?.user as AuthUser | undefined;
+      console.log(object);
+      "initDataResult", initDataResult;
+    }
+    console.log("isTelegram", isTelegram);
   }, []);
 
   const ToggleConnection = () => {
@@ -98,6 +116,13 @@ function Index() {
     <Main>
       <HeadMeta title="Welcome to game" />
       <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
+        <p>
+          {launchParams ? (
+            <h1>Welcome, {launchParams.user?.username || "Guest"}</h1>
+          ) : (
+            <h1>Loading...</h1>
+          )}
+        </p>
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
           onClick={ToggleConnection}

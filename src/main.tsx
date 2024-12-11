@@ -4,15 +4,17 @@ import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./Pages/Index.tsx";
 import Leaderboard from "./Pages/Leaderboard.tsx";
+import Splash from "./Pages/Splash.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Index />} />
+        <Route path="/" element={<Splash />} />
+        <Route path="/index" element={<Index />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         {/* <Route path="dashboard" element={<Dashboard />}> */}
-          {/* <Route index element={<RecentActivity />} />
+        {/* <Route index element={<RecentActivity />} />
           <Route path="project/:id" element={<Project />} /> */}
         {/* </Route> */}
       </Routes>
