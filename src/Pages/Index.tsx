@@ -25,12 +25,8 @@ function Index() {
   });
 
   useEffect(() => {
-    console.log("is uyux connect?", ethereum.isConnected());
-
-    // const isTelegramApp = window.Telegram && window.Telegram.WebApp;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("tgWebApp") === "true") {
+    // console.log("is uyux connect?", ethereum.isConnected());
+    try {
       setIsTelegram(true);
       const { initDataRaw, initData } = retrieveLaunchParams();
       setUser(initData?.user);
@@ -41,8 +37,16 @@ function Index() {
       const initDataResult = lp.initData;
       const user = initDataResult?.user;
       console.log("initDataResult", user);
-    } else {
+    } catch (error) {
       setIsTelegram(false);
+      console.log("Not Telegram");
+    }
+    // const isTelegramApp = window.Telegram && window.Telegram.WebApp;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("tgWebApp") === "true") {
+
+    } else {
     }
   }, []);
 
