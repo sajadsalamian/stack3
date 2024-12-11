@@ -126,7 +126,7 @@ function Index() {
           {user ? (
             <div>
               <p>username : {user.username}</p>
-              <p>first name : {user.first_name}</p>
+              <p>first name : {user.first_name} - {user.last_name}</p>
               <p>id : {user.id}</p>
               <p>is bot : {user.is_bot}</p>
             </div>
