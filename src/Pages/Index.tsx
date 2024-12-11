@@ -1,8 +1,8 @@
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 import { useEffect, useState } from "react";
-import { Toast } from "../Layouts/Main/Helper";
-import Button from "../Elements/Button";
-import Main, { HeadMeta } from "../Layouts/Main/Main";
+import { Toast } from "../components/Layouts/Main/Helper";
+import Button from "../components/Elements/Button";
+import Main, { HeadMeta } from "../components/Layouts/Main/Main";
 
 function Index() {
   const [account, setAccount] = useState(null);

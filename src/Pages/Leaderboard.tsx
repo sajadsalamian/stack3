@@ -1,4 +1,4 @@
-import Main, { HeadMeta } from "../Layouts/Main/Main";
+import Main, { HeadMeta } from "../components/Layouts/Main/Main";
 
 export default function Leaderboard() {
   return (

@@ -2,8 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Index from "./components/Pages/Index.tsx";
-import Leaderboard from "./components/Pages/Leaderboard.tsx";
+import Index from "./Pages/Index.tsx";
+import Leaderboard from "./Pages/Leaderboard.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
