@@ -1,34 +1,32 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import Button from "./components/Elements/Button";
-import { Toast } from "./components/Layouts/Main/Helper";
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
+import { useEffect, useState } from "react";
+import { Toast } from "../Layouts/Main/Helper";
+import Button from "../Elements/Button";
+import Main from "../Layouts/Main/Main";
+import useDocumentTitle from "../Elements/useDocumentTitle";
 
-function App() {
+function Index() {
+  useDocumentTitle("Index")
   const [account, setAccount] = useState(null);
   const [signature, setSignature] = useState("");
 
   const { ethereum } = new WalletTgSdk({
-    injected: true, // Whether ethereum is injected into the window; if MetaMask is present, it will not be injected.
+    injected: true, // default: false
+    metaData: {
+      name: "UXUY Wallet", // if you want to use a custom name
+      icon: "https://uxuy.com/logo.png", // if you want to use a custom icon
+    },
   });
-  ethereum;
-  window.ethereum;
-
-  // const { connect, isConnected, disconnect } = useUyuxConnect();
-  // useEffect(() => {
-  //     if (isConnected) {
-  //         console.log("Connected to MetaMask!");
-  //     }
-  // }, [isConnected]);
 
   useEffect(() => {
     console.log("is uyux connect?", ethereum.isConnected());
   }, []);
 
   const ToggleConnection = () => {
+    ethereum;
+    window.ethereum;
     if (!ethereum.isConnected()) {
       ConnectToWallet();
-      console.log(signature);
     } else {
       DisconnectWallet();
     }
@@ -99,7 +97,7 @@ function App() {
   };
 
   return (
-    <>
+    <Main>
       <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
@@ -126,8 +124,8 @@ function App() {
           </>
         )}
       </div>
-    </>
+    </Main>
   );
 }
 
-export default App;
+export default Index;
