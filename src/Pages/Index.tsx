@@ -32,8 +32,7 @@ function Index() {
       setLaunchParams(lp);
       const initDataResult = lp.initData;
       const user = initDataResult?.user as AuthUser | undefined;
-      console.log(object);
-      "initDataResult", initDataResult;
+      console.log("initDataResult", initDataResult);
     }
     console.log("isTelegram", isTelegram);
   }, []);

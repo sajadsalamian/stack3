@@ -12,7 +12,7 @@ export default function Splash() {
   return (
     <div className="w-screen h-screen">
       <img
-        src="/public/images/splash.jpg"
+        src="/src/assets/images/splash.jpg"
         alt=""
         className="w-full h-full object-cover"
       />
