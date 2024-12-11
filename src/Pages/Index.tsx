@@ -125,9 +125,13 @@ function Index() {
           <p>User Details:</p>
           {user ? (
             <div>
+              <p>initData: {JSON.stringify(initData)}</p>
+              <p>initDataRaw: {JSON.stringify(initDataRaw)}</p>
               <p>user: {JSON.stringify(user)}</p>
+
+              <img src={user.photoUrl} alt="" className="w-8 h-8 rounded-full"/>
               <p>username : {user.username}</p>
-              <p>first name : {user.first_name} - {user.last_name}</p>
+              <p>first name : {user.firstName} - {user.lastName}</p>
               <p>id : {user.id}</p>
               <p>is bot : {user.is_bot}</p>
             </div>
