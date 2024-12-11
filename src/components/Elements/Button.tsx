@@ -1,6 +1,5 @@
-import React, { ComponentProps } from "react";
 import { Icon } from "@iconify/react";
-import { VariantProps, cva } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 
 export const buttonStyle = cva(
@@ -38,11 +37,11 @@ export default function Button({
     iconName = "teenyicons:arrow-left-outline",
     hFlip = false,
     badge = "",
-    onClick,
+    onClick = new Function(),
     disabled = false
 }) {
     return type != "b" ? (
-        <Link
+        <a
             href={link}
             className={twMerge(buttonStyle({ variant }), className)}
         >
@@ -66,7 +65,7 @@ export default function Button({
                     {badge}
                 </span>
             )}
-        </Link>
+        </a>
     ) : (
         <button
             type="button"

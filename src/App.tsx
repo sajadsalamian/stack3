@@ -28,6 +28,7 @@ function App() {
   const ToggleConnection = () => {
     if (!ethereum.isConnected()) {
       ConnectToWallet();
+      console.log(signature);
     } else {
       DisconnectWallet();
     }
