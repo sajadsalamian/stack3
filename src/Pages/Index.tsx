@@ -7,10 +7,12 @@ import {
   retrieveLaunchParams,
   useLaunchParams,
 } from "@telegram-apps/sdk-react";
+import { p } from "framer-motion/client";
 
 function Index() {
   const [isTelegram, setIsTelegram] = useState(false);
-  const [launchParams, setLaunchParams] = useState(null);
+  const [initDataRaw, setInitDataRaw] = useState();
+  const [initData, setInitData] = useState(null);
   const [user, setUser] = useState(null);
 
   const [account, setAccount] = useState(null);
@@ -29,24 +31,12 @@ function Index() {
     try {
       setIsTelegram(true);
       const { initDataRaw, initData } = retrieveLaunchParams();
+      setInitData(initData);
+      setInitDataRaw(initDataRaw);
       setUser(initData?.user);
-      console.log("asdasdasdsa", initData?.user);
-
-      const lp = useLaunchParams();
-      setLaunchParams(lp);
-      const initDataResult = lp.initData;
-      const user = initDataResult?.user;
-      console.log("initDataResult", user);
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
-    }
-    // const isTelegramApp = window.Telegram && window.Telegram.WebApp;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("tgWebApp") === "true") {
-
-    } else {
     }
   }, []);
 
@@ -128,8 +118,22 @@ function Index() {
     <Main>
       <HeadMeta title="Welcome to game" />
       <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
-        <div>is Telegram : {isTelegram ? "true" : "false"}</div>
-        <p>user : {user ? user.username : "not Defined"}</p>
+        <div className="mb-5">
+          is Telegram : {isTelegram ? "true" : "false"}
+        </div>
+        <div className="mb-5">
+          <p>User Details:</p>
+          {user ? (
+            <div>
+              <p>username : {user.username}</p>
+              <p>first name : {user.first_name}</p>
+              <p>id : {user.id}</p>
+              <p>is bot : {user.is_bot}</p>
+            </div>
+          ) : (
+            <p>not Defined</p>
+          )}
+        </div>
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
           onClick={ToggleConnection}
