@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-import Main from "../../components/Layouts/Main/Main";
+import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
 import Button from "../../components/Elements/Button";
 import { Toast } from "../../components/Layouts/Main/Helper";
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
+import splash from "../../assets/images/splash.png";
 
 export default function Profile() {
   const [initDataRaw, setInitDataRaw] = useState();
   const [isTelegram, setIsTelegram] = useState(false);
   const [initData, setInitData] = useState(null);
   const [user, setUser] = useState(null);
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState("");
   const [signature, setSignature] = useState("");
 
   useEffect(() => {
-    // console.log("is uyux connect?", ethereum.isConnected());
+    console.log("is uyux metamask?", ethereum.isMetaMask);
+    if (ethereum.isConnected()) {
+      setAccount(ethereum.selectedAddress);
+    }
     try {
       setIsTelegram(true);
       const { initDataRaw, initData } = retrieveLaunchParams();
@@ -24,6 +28,7 @@ export default function Profile() {
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
+      setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
   }, []);
 
@@ -34,16 +39,6 @@ export default function Profile() {
       icon: "https://uxuy.com/logo.png", // if you want to use a custom icon
     },
   });
-
-  const ToggleConnection = () => {
-    ethereum;
-    window.ethereum;
-    if (!ethereum.isConnected()) {
-      ConnectToWallet();
-    } else {
-      DisconnectWallet();
-    }
-  };
 
   const ConnectToWallet = async () => {
     const accounts = await ethereum.request({
@@ -111,33 +106,37 @@ export default function Profile() {
 
   return (
     <Main title="Profile">
-      <div className="mb-5">
-        <p>User Details:</p>
+      <HeadMeta title="Profile"/>
+      <div className="mb-5 pt-5">
         {user ? (
-          <div>
-            <p>initData: {JSON.stringify(initData)}</p>
-            <p>user: {JSON.stringify(user)}</p>
-
-            <img src={user.photoUrl} alt="" className="w-8 h-8 rounded-full" />
-            <p>username : {user.username}</p>
-            <p>
+          <div className="text-center">
+            {/* <p>initData: {JSON.stringify(initData)}</p> */}
+            {/* <p>user: {JSON.stringify(user)}</p> */}
+            <img
+              src={user.photoUrl}
+              alt=""
+              className="w-12 h-12 rounded-full mx-auto mb-5"
+            />
+            <p className="mb-2">username : {user.username}</p>
+            <p className="mb-2">
               first name : {user.firstName} - {user.lastName}
             </p>
-            <p>id : {user.id}</p>
-            <p>is bot : {user.is_bot}</p>
+            {/* <p>id : {user.id}</p> */}
+            {/* <p>is bot : {user.is_bot}</p> */}
           </div>
         ) : (
           <p>not Defined</p>
         )}
       </div>
       <div className="p-2  text-center  overflow-hidden">
-        <Button
-          label={ethereum.isConnected() ? "Disconnect" : "Connect"}
-          onClick={ToggleConnection}
-          className="mb-5"
-        />
-        {ethereum.isConnected() && (
+        {ethereum.isConnected() ? (
           <>
+            <p className="mb-2">
+              Wallet Address:
+              {account.substring(0, 4) +
+                "..." +
+                account.substring(account.length - 5, account.length - 1)}
+            </p>
             <Button
               label="Sign Message"
               onClick={SignWallet}
@@ -153,7 +152,18 @@ export default function Profile() {
               onClick={SendTransactions}
               className="mb-5"
             />
+            <Button
+              label="Disconnect Wallet"
+              onClick={DisconnectWallet}
+              className="mb-5"
+            />
           </>
+        ) : (
+          <Button
+            label="Connect Wallet"
+            onClick={ConnectToWallet}
+            className="mb-5"
+          />
         )}
       </div>
     </Main>
