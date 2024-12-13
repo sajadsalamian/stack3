@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import splash from "../assets/images/splash.png";
 
 export default function Splash() {
   const navigate = useNavigate();
@@ -11,11 +12,7 @@ export default function Splash() {
 
   return (
     <div className="w-screen h-screen">
-      <img
-        src="/src/assets/images/splash.jpg"
-        alt=""
-        className="w-full h-full object-cover"
-      />
+      <img src={splash} alt="" className="w-full h-full object-cover" />
     </div>
   );
 }

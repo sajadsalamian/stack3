@@ -2,7 +2,7 @@ import { Key } from "react";
 
 export default function Table({ headers = [], data = [] }) {
   return (
-    <div className="w-full">
+    <div className="w-full shadow-xl">
       <table className="w-full bg-white overflow-x-auto md:table-fixed">
         <thead className="bg-primary">
           <tr>

@@ -1,30 +1,17 @@
+import React, { useEffect, useState } from "react";
+import Main from "../../components/Layouts/Main/Main";
+import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
+import Button from "../../components/Elements/Button";
+import { Toast } from "../../components/Layouts/Main/Helper";
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
-import { useEffect, useState } from "react";
-import { Toast } from "../components/Layouts/Main/Helper";
-import Button from "../components/Elements/Button";
-import Main, { HeadMeta } from "../components/Layouts/Main/Main";
-import {
-  retrieveLaunchParams,
-  useLaunchParams,
-} from "@telegram-apps/sdk-react";
-import { p } from "framer-motion/client";
 
-function Index() {
-  const [isTelegram, setIsTelegram] = useState(false);
+export default function Profile() {
   const [initDataRaw, setInitDataRaw] = useState();
+  const [isTelegram, setIsTelegram] = useState(false);
   const [initData, setInitData] = useState(null);
   const [user, setUser] = useState(null);
-
   const [account, setAccount] = useState(null);
   const [signature, setSignature] = useState("");
-
-  const { ethereum } = new WalletTgSdk({
-    injected: true, // default: false
-    metaData: {
-      name: "UXUY Wallet", // if you want to use a custom name
-      icon: "https://uxuy.com/logo.png", // if you want to use a custom icon
-    },
-  });
 
   useEffect(() => {
     // console.log("is uyux connect?", ethereum.isConnected());
@@ -39,6 +26,14 @@ function Index() {
       console.log("Not Telegram");
     }
   }, []);
+
+  const { ethereum } = new WalletTgSdk({
+    injected: true, // default: false
+    metaData: {
+      name: "UXUY Wallet", // if you want to use a custom name
+      icon: "https://uxuy.com/logo.png", // if you want to use a custom icon
+    },
+  });
 
   const ToggleConnection = () => {
     ethereum;
@@ -115,30 +110,27 @@ function Index() {
   };
 
   return (
-    <Main>
-      <HeadMeta title="Welcome to game" />
-      <div className="p-2 h-[500px] bg-light w-full text-center flex flex-col items-center justify-center">
-        <div className="mb-5">
-          is Telegram : {isTelegram ? "true" : "false"}
-        </div>
-        <div className="mb-5">
-          <p>User Details:</p>
-          {user ? (
-            <div>
-              <p>initData: {JSON.stringify(initData)}</p>
-              <p>initDataRaw: {JSON.stringify(initDataRaw)}</p>
-              <p>user: {JSON.stringify(user)}</p>
+    <Main title="Profile">
+      <div className="mb-5">
+        <p>User Details:</p>
+        {user ? (
+          <div>
+            <p>initData: {JSON.stringify(initData)}</p>
+            <p>user: {JSON.stringify(user)}</p>
 
-              <img src={user.photoUrl} alt="" className="w-8 h-8 rounded-full"/>
-              <p>username : {user.username}</p>
-              <p>first name : {user.firstName} - {user.lastName}</p>
-              <p>id : {user.id}</p>
-              <p>is bot : {user.is_bot}</p>
-            </div>
-          ) : (
-            <p>not Defined</p>
-          )}
-        </div>
+            <img src={user.photoUrl} alt="" className="w-8 h-8 rounded-full" />
+            <p>username : {user.username}</p>
+            <p>
+              first name : {user.firstName} - {user.lastName}
+            </p>
+            <p>id : {user.id}</p>
+            <p>is bot : {user.is_bot}</p>
+          </div>
+        ) : (
+          <p>not Defined</p>
+        )}
+      </div>
+      <div className="p-2  text-center  overflow-hidden">
         <Button
           label={ethereum.isConnected() ? "Disconnect" : "Connect"}
           onClick={ToggleConnection}
@@ -167,5 +159,3 @@ function Index() {
     </Main>
   );
 }
-
-export default Index;
