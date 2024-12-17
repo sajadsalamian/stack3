@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css?family=Comfortaa");
-
 #container {
   width: 100%;
   height: 100%;

@@ -35,18 +35,25 @@ export default function Splash() {
       console.log("Not Telegram");
       setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
-    let config = {
-      header: [
-        {
-          key: "content-type",
-          value: "application/json",
-        },
-      ],
-    };
+
+    fetch(import.meta.env.VITE_API_URL + "/user", {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: "12",
+        user_name: "saeed",
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Headers": "X-Requested-With",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
 
     axios
       .post(
-        "https://khar.app/api/useraaasdsad",
+        import.meta.env.VITE_API_URL + "/user",
         JSON.stringify({
           user_id: 12,
           user_name: "saeed",
@@ -54,6 +61,7 @@ export default function Splash() {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
           },
         }
       )
