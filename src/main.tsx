@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -7,13 +6,17 @@ import Earn from "./Pages/Earns/Earn.tsx";
 import Leaderboard from "./Pages/Leaderboards/Leaderboard.tsx";
 import Index from "./Pages/Game/Index.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
+import Intro from "./Pages/Intro/Intro.tsx";
+import Game from "./Pages/Game/Game.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  <div>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Splash />} />
+        <Route path="/intro" element={<Intro />} />
         <Route path="/index" element={<Index />} />
+        <Route path="/game/play" element={<Game />} />
         <Route path="/earn" element={<Earn />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
@@ -23,5 +26,5 @@ createRoot(document.getElementById("root")!).render(
         {/* </Route> */}
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  </div>
 );

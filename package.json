@@ -13,15 +13,19 @@
     "@iconify/react": "^5.1.0",
     "@telegram-apps/sdk-react": "^2.0.19",
     "@uxuycom/web3-tg-sdk": "^0.1.6",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
+    "dotenv": "^16.4.7",
     "framer-motion": "^11.13.5",
+    "gsap": "^3.12.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^7.0.2",
     "react-toastify": "^10.0.6",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "three": "^0.171.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
@@ -34,6 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
     "postcss": "^8.4.49",
+    "react-error-overlay": "^6.0.9",
     "tailwindcss": "^3.4.16",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.15.0",

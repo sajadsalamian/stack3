@@ -1,14 +1,15 @@
 import { Icon } from "@iconify/react";
 import { cva } from "class-variance-authority";
+import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 export const buttonStyle = cva(
-  "rounded-md px-4  py-2 text-xs font-semibold shadow-sm relative ",
+  "rounded-md px-4  py-2 text-xs font-semibold shadow-sm relative text-center",
   {
     variants: {
       variant: {
         primary: [
-          "bg-primary  text-white hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          "bg-primary text-white hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         ],
         primary2: [
           "bg-primary  text-white hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
@@ -41,7 +42,7 @@ export default function Button({
   disabled = false,
 }) {
   return type != "b" ? (
-    <a href={link} className={twMerge(buttonStyle({ variant }), className)}>
+    <Link to={link} className={twMerge(buttonStyle({ variant }), className)}>
       {icon && !iconLeft ? (
         <Icon
           icon={iconName}
@@ -62,14 +63,14 @@ export default function Button({
           {badge}
         </span>
       )}
-    </a>
+    </Link>
   ) : (
     <button
       type="button"
       className={twMerge(
         buttonStyle({ variant }),
         className,
-        disabled && "bg-black text-gray-400"
+        disabled && "bg-gray-700 text-gray-500"
       )}
       onClick={onClick}
       disabled={disabled}

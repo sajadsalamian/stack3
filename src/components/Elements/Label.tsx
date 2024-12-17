@@ -4,7 +4,7 @@ import React from "react";
 const labelStyle = cva("", {
     variants: {
         variant: {
-            primary: ["block text-sm font-medium leading-6 text-gray-900"],
+            primary: ["block text-sm font-medium leading-6 text-gray-900 text-white"],
         },
     },
     defaultVariants: {
