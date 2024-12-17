@@ -44,7 +44,7 @@ export default function Splash() {
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Origin": "*",
         // "Access-Control-Allow-Headers": "X-Requested-With",
       },
     })
@@ -61,7 +61,7 @@ export default function Splash() {
         {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Origin": "*",
           },
         }
       )
