@@ -12,12 +12,6 @@ export default function Splash() {
 
   const navigate = useNavigate();
   useEffect(() => {
-    // var formdata = new FormData();
-    // //add three variable to form
-    // formdata.append("user_id", "12");
-    // formdata.append("user_name", "saeed");
-    // formdata.append("initial_token", "200");
-
     let userData = { user_id: "12", user_name: "saeed", initial_token: 200 };
 
     try {
@@ -44,27 +38,21 @@ export default function Splash() {
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
-        // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Headers": "X-Requested-With",
+        // "Access-Control-Allow-Origin": "https://rust-api-gyot.shuttle.app",
       },
     })
       .then((response) => response.json())
-      .then((json) => console.log(json));
+      .then((json) => console.log(json))
+      .catch((error) => console.log("Authorization failed : " + error));
 
     axios
-      .post(
-        import.meta.env.VITE_API_URL + "/user",
-        JSON.stringify({
-          user_id: 12,
-          user_name: "saeed",
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // "Access-Control-Allow-Origin": "*",
-          },
-        }
-      )
+      .post(import.meta.env.VITE_API_URL + "/user", userData, {
+        headers: {
+          "Content-Type": "application/json",
+          // "Access-Control-Allow-Origin":
+          //   "https://rust-api-gyot.shuttle.app",
+        },
+      })
       .then((res) => {
         console.log("user fetch res", res);
         res.data.photo_url = initData?.user.photoUrl;
