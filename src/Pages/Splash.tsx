@@ -9,10 +9,10 @@ export default function Splash() {
   const [initDataRaw, setInitDataRaw] = useState();
   const [isTelegram, setIsTelegram] = useState(false);
   const [initData, setInitData] = useState(null);
-
   const navigate = useNavigate();
+
   useEffect(() => {
-    let userData = { user_id: "12", user_name: "saeed", initial_token: 200 };
+    let userData = { user_id: 11, user_name: "saeed" };
 
     try {
       setIsTelegram(true);
@@ -30,40 +30,19 @@ export default function Splash() {
       setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
 
-    fetch(import.meta.env.VITE_API_URL + "/user", {
-      method: "POST",
-      body: JSON.stringify({
-        user_id: "12",
-        user_name: "saeed",
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        // "Access-Control-Allow-Origin": "https://rust-api-gyot.shuttle.app",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json))
-      .catch((error) => console.log("Authorization failed : " + error));
-
     axios
-      .post(import.meta.env.VITE_API_URL + "/user", userData, {
-        headers: {
-          "Content-Type": "application/json",
-          // "Access-Control-Allow-Origin":
-          //   "https://rust-api-gyot.shuttle.app",
-        },
-      })
+      .post(import.meta.env.VITE_API_URL + "/user", userData)
       .then((res) => {
-        console.log("user fetch res", res);
+        console.log("Axios user fetch res", res);
         res.data.photo_url = initData?.user.photoUrl;
         setUser(res.data);
         localStorage.setItem("user", JSON.stringify(res.data));
 
-        // if (res.data.is_first_time) {
-        //   navigate("/intro");
-        // } else {
-        //   navigate("/index");
-        // }
+        if (!res.data.is_first_time) {
+          navigate("/intro");
+        } else {
+          navigate("/index");
+        }
       })
       .catch((err) => {
         console.log("Fetch user Data Error:", err);

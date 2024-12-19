@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { toast } from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 import { twMerge } from "tailwind-merge";
 
 export const AnimationVariants = (
@@ -169,51 +169,30 @@ export const toEnglishNumber = (str: any) => {
 };
 
 export const Toast = (type: string, text: string, duration = 5000) => {
+  const options: ToastOptions = {
+    position: "top-right",
+    autoClose: duration,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    pauseOnFocusLoss: false,
+  };
   switch (type) {
     case "success":
-      return toast.success(text, {
-        position: "top-right",
-        autoClose: duration,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    case "s":
+      return toast.success(text, options);
     case "warn":
-      return toast.warn(text, {
-        position: "top-right",
-        autoClose: duration,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    case "w":
+      return toast.warn(text, options);
     case "info":
-      return toast.info(text, {
-        position: "top-right",
-        autoClose: duration,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    case "i":
+      return toast.info(text, options);
     case "error":
-      return toast.error(text, {
-        position: "top-right",
-        autoClose: duration,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    case "e":
+      return toast.error(text, options);
   }
 };
 

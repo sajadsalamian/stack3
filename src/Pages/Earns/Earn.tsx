@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Button from "../../components/Elements/Button";
@@ -7,25 +7,13 @@ import axios from "axios";
 
 export default function Earn() {
   const [user, setUser] = useState({});
-  const [availableTask, setAvailableTask] = useState([]);
-  const [doneTask, setDoneTask] = useState([]);
-
-  // const [earns, setEarns] = useState([
-  //   {
-  //     icon: "line-md:twitter-x",
-  //     label: "Follow Official Binance Twitter",
-  //     type: "binanceFollow",
-  //     bLabel: "Follow",
-  //     url: "https://x.com/intent/user?screen_name=binance",
-  //     isDone: true,
-  //     isLoading: false,
-  //   },
-  // ]);
+  const [availableTask, setAvailableTask]: any[] = useState([]);
+  const [doneTask, setDoneTask]: any[] = useState([]);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
-    console.log(JSON.parse(localStorage.getItem("user")));
-    let avt = JSON.parse(localStorage.getItem("user")).available_tasks;
+    setUser(JSON.parse(localStorage.getItem("user")!));
+    console.log(JSON.parse(localStorage.getItem("user")!));
+    let avt = JSON.parse(localStorage.getItem("user")!).available_tasks;
     avt.forEach(
       (element: { isDone: boolean; isLoading: boolean; icon: string }) => {
         element.isDone = false;
@@ -35,65 +23,63 @@ export default function Earn() {
     );
     setAvailableTask(avt);
 
-    let dt = JSON.parse(localStorage.getItem("user")).done_tasks;
-    dt.forEach(
-      (element: { isDone: boolean; isLoading: boolean; icon: string }) => {
-        element.isDone = true;
-        element.isLoading = false;
-        element.icon = "line-md:twitter-x";
-      }
-    );
+    let dt = JSON.parse(localStorage.getItem("user")!).done_tasks;
+    if (dt != null) {
+      dt.forEach(
+        (element: { isDone: boolean; isLoading: boolean; icon: string }) => {
+          element.isDone = true;
+          element.isLoading = false;
+          element.icon = "line-md:twitter-x";
+        }
+      );
+    }
     setDoneTask(dt);
   }, []);
 
-  const EarnClick = (item: never) => {
+  const EarnClick = (item: any) => {
     console.log("EarnClick", item.type);
-    window.open(item.url, "_blank").focus();
+    window.open(item.task_link, "_blank").focus();
+
     setAvailableTask(
-      availableTask.map((earn) => {
-        if (earn.id === item.id) {
-          return { ...earn, isLoading: true };
-        } else {
-          return earn;
+      availableTask.map((task: { id: any }) => {
+        if (task.id === item.id) {
+          return { ...task, isLoading: true };
         }
+        return task;
       })
     );
 
-    const taskData = {
-      user_id: user.id,
-      task_id: item.id,
-    };
+    let postData = { user_id: 11, task_id: item.id };
     axios
-      .post(import.meta.env.VITE_API_UR + "task/done", taskData)
+      .post(import.meta.env.VITE_API_URL + "/submit_task", postData)
       .then((res) => {
-        console.log("user fetch res", res);
-        const done = availableTask.filter((x) => (x.id = item.id));
-        setAvailableTask(
-          availableTask.map((earn) => {
-            if (earn.id !== item.id) {
-              return earn;
-            }
-          })
-        );
-        setDoneTask([...doneTask, done[0]]);
+        console.log("!res.data[0]", res.data[0]);
+        if (!res.data[0].error) {
+          setTimeout(() => {
+            const done = availableTask.filter((x) => x.id == item.id);
+            const available = availableTask.filter((x) => x.id != item.id);
+            setAvailableTask(available);
+            setDoneTask([...doneTask, done[0]]);
+            let userInfo = {
+              ...user,
+              available_tasks: available,
+              done_tasks: [...doneTask, done[0]],
+            };
+            setUser(userInfo);
+            localStorage.setItem("user", JSON.stringify(userInfo));
+          }, 5000);
+        }
       })
       .catch((err) => {
         console.log("Fetch user Data Error:", err);
       });
-
-    setTimeout(() => {
-      const done = availableTask.filter((x) => x.id == item.id);
-      const available = availableTask.filter((x) => x.id != item.id);
-      setAvailableTask(available);
-      setDoneTask([...doneTask, done[0]]);
-    }, 2000);
   };
 
   return (
     <Main>
       <HeadMeta title="Earn more token" />
       <div className=" p-2">
-        {availableTask.map((item, index) => (
+        {availableTask.map((item: any, index: number) => (
           <div
             className="flex gap-x-3 bg-gray-200 py-3 px-4 items-center mb-2"
             key={index}
@@ -104,7 +90,7 @@ export default function Earn() {
               height="20"
               className="text-gray-600"
             />
-            <p className="text-gray-600 text-[14px]">{item.label}</p>
+            <p className="text-gray-600 text-[14px]">{item.title}</p>
             <div className="ml-auto">
               {!item.isLoading ? (
                 <Button
@@ -126,28 +112,29 @@ export default function Earn() {
             </div>
           </div>
         ))}
-        {doneTask.map((item, index) => (
-          <div
-            className="flex gap-x-3 bg-gray-200 py-3 px-4 items-center mb-2"
-            key={index}
-          >
-            <Icon
-              icon={item.icon}
-              width="20"
-              height="20"
-              className="text-gray-600"
-            />
-            <p className="text-gray-600 text-[14px]">{item.label}</p>
-            <div className="ml-auto">
-              <Button
-                onClick={() => EarnClick(item)}
-                label="Claimed"
-                className=""
-                disabled={true}
+        {doneTask != null &&
+          doneTask.map((item: any, index: number) => (
+            <div
+              className="flex gap-x-3 bg-gray-200 py-3 px-4 items-center mb-2"
+              key={index}
+            >
+              <Icon
+                icon={item.icon}
+                width="20"
+                height="20"
+                className="text-gray-600"
               />
+              <p className="text-gray-600 text-[14px]">{item.title}</p>
+              <div className="ml-auto">
+                <Button
+                  onClick={() => EarnClick(item)}
+                  label="Claimed"
+                  className=""
+                  disabled={true}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </Main>
   );

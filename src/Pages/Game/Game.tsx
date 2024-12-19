@@ -1,27 +1,41 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import Button from "../../components/Elements/Button";
 import * as THREE from "three";
-import gsap from "gsap";
 import axios from "axios";
+import { Toast } from "../../components/Layouts/Main/Helper";
+import { RotatingLines } from "react-loader-spinner";
+import gameBack from "../../assets/images/game_back.png";
 
 export default function Game() {
   const [userInfo, setUserInfo] = useState(null);
+  const [isStart, setIsStart] = useState(false);
+  const [loadingGame, setLoadingGame] = useState(false);
+  const [gaming, setGaming]: any = useState(null);
+  const [score, setScore]: any = useState(null);
 
   useEffect(() => {
     let userInfo1 = JSON.parse(localStorage.getItem("user"));
-    userInfo1.total_token = userInfo1.total_token - 1;
-    // console.log("userInfo", userInfo1);
     setUserInfo(userInfo1);
-
-    // localStorage.setItem("user", JSON.stringify(userInfo));
-    // let game = new GameClass();
   }, []);
 
   useEffect(() => {
-    console.log("userinfo gamasd", userInfo);
-    let game = new GameClass();
+    if (isStart) {
+      let game1 = new GameClass();
+      game1.startGame();
+      setGaming(game1);
+    }
+  }, [isStart]);
+
+  useEffect(() => {
+    console.log("userinfo change", userInfo);
+    if (userInfo != null && userInfo.user_id != null && !isStart) {
+    }
   }, [userInfo]);
+
+  useEffect(() => {
+    console.log("score", score);
+  }, [gaming]);
 
   interface BlockReturn {
     placed?: any;
@@ -394,10 +408,6 @@ export default function Game() {
 
       document.addEventListener("touchstart", (e) => {
         e.preventDefault();
-        // this.onAction();
-
-        // ☝️ this triggers after click on android so you
-        // insta-lose, will figure it out later.
       });
     }
 
@@ -423,7 +433,6 @@ export default function Game() {
     }
 
     startGame() {
-      console.log("usert sasd", userInfo);
       if (this.state != this.STATES.PLAYING) {
         this.scoreContainer.innerHTML = "0";
         this.updateState(this.STATES.PLAYING);
@@ -531,6 +540,7 @@ export default function Game() {
     }
 
     endGame() {
+      setIsStart(false);
       this.updateState(this.STATES.ENDED);
       UpdateScore(this.scoreContainer.innerHTML);
     }
@@ -544,64 +554,124 @@ export default function Game() {
     }
   }
 
-  const UpdateScore = (score: number) => {
-    console.log(score, userInfo);
-    if (score <= userInfo.score) {
-      return;
-    }
-    let postData = { user_id: userInfo.user_id, score: score };
+  const StartGame = (string: string) => {
+    console.log("start game", string);
+    setLoadingGame(true);
+
+    let postData = { user_id: 11 };
     axios
-      .post(import.meta.env.VITE_API_URL + "/submit_score", { postData })
+      .post(import.meta.env.VITE_API_URL + "/start_game", postData)
       .then((res) => {
-        console.log("user fetch res", res);
-        // setUser(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
+        console.log(res.data[0]);
+        setLoadingGame(false);
+        if (!res.data[0].error) {
+          // setIsStart(true);
+          // userInfo1 = userInfo;
+          // userInfo1.total_token = +userInfo1.total_token - 1;
+          // setUserInfo(userInfo1);
+          setIsStart(true);
+          setLoadingGame(false);
+        } else {
+          setIsStart(false);
+          Toast("error", "You don't have enough token to play game");
+        }
       })
       .catch((err) => {
-        setUserInfo({
-          ...userInfo,
-          score: score,
-        });
-        console.log("user1", userInfo);
-        // localStorage.setItem("user", JSON.stringify(userInfo));
-        // console.log("Fetch user Data Error:", err);
+        setLoadingGame(false);
+        setIsStart(false);
+        console.log("Fetch StartGame:", err);
+      });
+  };
+
+  const UpdateScore = (score: number) => {
+    setScore(score);
+    setGaming(null);
+    if (Number(score) <= Number(userInfo.score)) {
+      return;
+    }
+    let postData = { user_id: 11, score: Number(score) };
+    axios
+      .post(import.meta.env.VITE_API_URL + "/submit_score", postData)
+      .then((res) => {
+        console.log("user fetch res", res.data[0]);
+        setUserInfo({ ...userInfo, score: score });
+        localStorage.setItem("user", JSON.stringify(userInfo));
+      })
+      .catch((err) => {
+        setUserInfo({ ...userInfo, score: score });
+        localStorage.setItem("user", JSON.stringify(userInfo));
+        console.log("user1", err);
       });
   };
 
   return (
-    <Main>
+    <Main showFooter={false} showHeader={false}>
       <HeadMeta title="Play Game" />
-      <div className="p-2">
-        <div id="container">
-          <h1 className="text-white text-center">
-            Play Game {userInfo?.user_name}!
-          </h1>
+      <div className="relative">
+        {isStart && (
+          <div id="container">
+            <div id="game"></div>
+            <div id="score">0</div>
+            <div className="game-over text-center">
+              <h2 className="text-sm">Game Over</h2>
+              <h2 className="text-sm">
+                Your Weekly Best Score : {userInfo?.score}
+              </h2>
+              <p>Token Remain: {userInfo?.total_token}</p>
+              <p>Tab to start again</p>
+            </div>
+          </div>
+        )}
 
-          <div id="game"></div>
-          <div id="score">0</div>
-          <div id="instructions">
-            Click (or press the spacebar) to place the block
-          </div>
-          <div className="game-over">
-            <h2>Game Over</h2>
-            <h2>Your Best Score : {userInfo?.score}</h2>
-            <p>You did great, you're the best.</p>
-            <p>Click or spacebar to start again</p>
-          </div>
-          <div className="game-ready">
-            <div id="start-button">Start</div>
-            <div></div>
-          </div>
-        </div>
+        {!isStart && (
+          <div style={{ backgroundImage: `url(${gameBack})` }} className="fixed top-0 bottom-0 right-0 left-0 bg-contain">
+            <div className="text-center mt-10">
+              <p className="text-black mb-2">
+                Remaining Token: {userInfo?.total_token}
+              </p>
+            </div>
+            {score != null && (
+              <div className="text-black mt-10 text-center">
+                <h2 className="text-1xl">Game Over</h2>
+                <h2>Your Score : {score}</h2>
+                <h2 className="text-1xl">
+                  Your Weekly Best Score : {userInfo?.score}
+                </h2>
+                <p>Token Remain: {userInfo?.total_token}</p>
+                {/* <p>Tab to start again</p> */}
+              </div>
+            )}
 
-        {/* <div className="fixed bottom-24 left-4 right-4 flex justify-center items-center">
-          <Button
-            label={`Save Score`}
-            type="l"
-            link="/game/play"
-            className=" w-full"
-          />
-        </div> */}
+            <div className="fixed bottom-5 left-4 right-4 flex justify-center items-center">
+              {!loadingGame ? (
+                <div className="flex gap-2 w-full">
+                  <Button
+                    label="Start Game"
+                    onClick={() => StartGame("sds")}
+                    className="w-full"
+                  />
+                  <Button
+                    label="Back to Home"
+                    type="l"
+                    link="/index"
+                    className=" w-full"
+                  />
+                </div>
+              ) : (
+                <div className="flex justify-center items-center">
+                  <RotatingLines
+                    visible={true}
+                    height="24"
+                    width="24"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    ariaLabel="rotating-lines-loading"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </Main>
   );

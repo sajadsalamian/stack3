@@ -28,7 +28,7 @@ export default function Header() {
       <header className="fixed z-1000 bottom-0 left-0 right-0 flex p-4 gap-x-4 z-50 bg-dark w-full">
         <ul className="flex justify-between gap-x-4 text-white w-full items-center">
           {items.map((item, index) => (
-            <li key={index}>
+            <li key={index} className="text-sm">
               <Link
                 to={item.route}
                 className={twMerge(

@@ -4,15 +4,19 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Helmet } from "react-helmet";
 
-export default function Main({ children, title = "" }) {
-
+export default function Main({
+  children,
+  title = "",
+  showHeader = true,
+  showFooter = false,
+}) {
   return (
     <div className="min-h-screen flex flex-col bg-dark-black">
       <meta name={title} content="React, JavaScript, semantic markup, html" />
       <ToastContainer />
-      <Header />
+      {showHeader && <Header />}
       <>{children}</>
-      <Footer />
+      {showFooter && <Footer />}
     </div>
   );
 }

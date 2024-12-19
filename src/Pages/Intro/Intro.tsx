@@ -7,7 +7,7 @@ export default function Intro() {
       <div className="flex flex-col justify-center items-center pb-10 h-full">
         <div className="grow flex flex-col justify-center items-center">
           <img src={splash} alt="" className="" />
-          <p className="text-white text-center">
+          <p className="text-white text-center px-2">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus,
             consequuntur. Natus porro voluptas quas, debitis reprehenderit ullam
             tenetur similique odio eos, ad in aspernatur obcaecati perferendis
