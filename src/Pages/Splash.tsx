@@ -30,8 +30,14 @@ export default function Splash() {
       setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
 
-    axios
-      .post(import.meta.env.VITE_API_URL + "/user", userData)
+    axios({
+      method: "post",
+      url: import.meta.env.VITE_API_URL + "/user",
+      data: userData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         console.log("Axios user fetch res", res);
         res.data.photo_url = initData?.user.photoUrl;
