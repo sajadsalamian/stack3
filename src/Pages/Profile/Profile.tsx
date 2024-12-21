@@ -211,7 +211,7 @@ export default function Profile() {
             />
             {/* <p className="mb-2">username : {user.user_name}</p> */}
             <p className="mb-2">
-              first name : {user.firstName} - {user.lastName}
+              Username : {user.user_name}
             </p>
             <p>Weekly Best Score: {user.score}</p>
             <p>Token: {user.total_token}</p>

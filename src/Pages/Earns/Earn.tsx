@@ -78,7 +78,7 @@ export default function Earn() {
     }, 5000);
   };
 
-  const ClaimTask = () => {
+  const ClaimTask = (item: any) => {
     console.log("claim Task");
     let postData = { user_id: 11, task_id: item.id };
     axios
@@ -86,8 +86,8 @@ export default function Earn() {
       .then((res) => {
         console.log("!res.data[0]", res.data[0]);
         if (!res.data[0].error) {
-          const done = availableTask.filter((x) => x.id == item.id);
-          const available = availableTask.filter((x) => x.id != item.id);
+          const done = availableTask.filter((x: any) => x.id == item.id);
+          const available = availableTask.filter((x: any) => x.id != item.id);
           setAvailableTask(available);
           setDoneTask([...doneTask, done[0]]);
           let userInfo = {
@@ -123,7 +123,9 @@ export default function Earn() {
             <div className="ml-auto">
               {!item.isLoading ? (
                 <Button
-                  onClick={() => EarnClick(item)}
+                  onClick={() =>
+                    item.isClaim ? ClaimTask(item) : EarnClick(item)
+                  }
                   label={item.isClaim ? "Claim" : "Start"}
                   className=""
                 />
