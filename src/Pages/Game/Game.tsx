@@ -593,7 +593,7 @@ export default function Game() {
     if (Number(score) <= Number(userInfo.score)) {
       return;
     }
-    let postData = { user_id: 11, score: Number(score) };
+    let postData = { user_id: userInfo.user_id, score: Number(score) };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_score", postData)
       .then((res) => {

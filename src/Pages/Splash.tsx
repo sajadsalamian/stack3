@@ -32,7 +32,6 @@ export default function Splash() {
 
     axios({
       method: "post",
-      // url: "https://rust-api-gyot.shuttle.app/api/user",
       url: import.meta.env.VITE_API_URL + "/user",
       data: userData,
     })

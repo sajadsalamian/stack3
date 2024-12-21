@@ -36,7 +36,7 @@ export default function Profile() {
     });
     setAccount(accounts[0]);
 
-    let postData = { user_id: 11, wallet_address: accounts[0] };
+    let postData = { user_id: user.user_id, wallet_address: accounts[0] };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_wallet", postData)
       .then((res) => {
@@ -59,7 +59,7 @@ export default function Profile() {
 
   const DisconnectWallet = () => {
     ethereum.disconnect();
-    let postData = { user_id: 11, wallet_address: "" };
+    let postData = { user_id: user.user_id, wallet_address: "" };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_wallet", postData)
       .then((res) => {
@@ -128,7 +128,7 @@ export default function Profile() {
       console.log("Transaction sent:", txHash);
 
       let postData = {
-        user_id: 11,
+        user_id: user.user_id,
         token_amount: Number(tokenCount),
         hash: txHash,
       };
@@ -170,7 +170,7 @@ export default function Profile() {
       Toast("error", message);
     }
 
-    let postData = { user_id: 11, token_amount: Number(tokenCount), hash: "" };
+    let postData = { user_id: user.user_id, token_amount: Number(tokenCount), hash: "" };
     axios
       .post(import.meta.env.VITE_API_URL + "/buy_token", postData)
       .then((res) => {

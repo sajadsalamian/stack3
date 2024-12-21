@@ -80,7 +80,7 @@ export default function Earn() {
 
   const ClaimTask = (item: any) => {
     console.log("claim Task");
-    let postData = { user_id: 11, task_id: item.id };
+    let postData = { user_id: user.user_id, task_id: item.id };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_task", postData)
       .then((res) => {
