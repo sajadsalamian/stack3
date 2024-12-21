@@ -32,7 +32,7 @@ export default function Table({ headers = [], data = [] }) {
                   ) : (
                     <span
                       className={
-                        data.isSelf != null && data.isSelf && "text-bold"
+                        data.isSelf != null && data.isSelf == 1 && "text-bold"
                       }
                     >
                       {item[head]}

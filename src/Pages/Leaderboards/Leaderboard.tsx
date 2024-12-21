@@ -21,7 +21,7 @@ export default function Leaderboard() {
         console.log("Axios leaderboard fetch res", res.data);
         res.data.forEach((element: { isSelf: boolean; user_id: any }) => {
           element.isSelf =
-            element.user_id && element.user_id == user.user_id ? true : false;
+            element.user_id && element.user_id == user.user_id ? "1" : "0";
         });
         setData(res.data);
       })
