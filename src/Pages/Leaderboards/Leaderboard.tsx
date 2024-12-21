@@ -1,14 +1,27 @@
+import { initData } from "@telegram-apps/sdk-react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Table from "../../components/Elements/Table";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 
 export default function Leaderboard() {
-  const headers = ["name", "score"];
-  const data = [
-    { name: "Sajad", score: "50" },
-    { name: "Saeed", score: "20" },
-    { name: "Hossein", score: "100" },
-    { name: "Nasran", score: "78" },
-  ];
+  const headers = ["user_name", "score"];
+  const [data, setData]: any = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: import.meta.env.VITE_API_URL + "/leaderboard?limit=10",
+    })
+      .then((res) => {
+        console.log("Axios leaderboard fetch res", res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log("Fetch leaderboard Data Error:", err);
+      });
+  }, []);
+
   return (
     <Main>
       <HeadMeta title="Leaderboard" />

@@ -20,18 +20,19 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
+    console.log("userinfo change", userInfo);
+    if (userInfo != null && userInfo.user_id != null && !isStart) {
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    console.log("score", score);
     if (isStart) {
       let game1 = new GameClass();
       game1.startGame();
       setGaming(game1);
     }
   }, [isStart]);
-
-  useEffect(() => {
-    console.log("userinfo change", userInfo);
-    if (userInfo != null && userInfo.user_id != null && !isStart) {
-    }
-  }, [userInfo]);
 
   useEffect(() => {
     console.log("score", score);
@@ -398,9 +399,9 @@ export default function Game() {
 
       this.updateState(this.STATES.READY);
 
-      document.addEventListener("keydown", (e) => {
-        if (e.keyCode == 32) this.onAction();
-      });
+      // document.addEventListener("keydown", (e) => {
+      //   if (e.keyCode == 32) this.onAction();
+      // });
 
       document.addEventListener("click", (e) => {
         this.onAction();
@@ -540,7 +541,8 @@ export default function Game() {
     }
 
     endGame() {
-      setIsStart(false);
+      // if(this.)
+      // setIsStart(false);
       this.updateState(this.STATES.ENDED);
       UpdateScore(this.scoreContainer.innerHTML);
     }
@@ -558,29 +560,31 @@ export default function Game() {
     console.log("start game", string);
     setLoadingGame(true);
 
-    let postData = { user_id: 11 };
-    axios
-      .post(import.meta.env.VITE_API_URL + "/start_game", postData)
-      .then((res) => {
-        console.log(res.data[0]);
-        setLoadingGame(false);
-        if (!res.data[0].error) {
-          // setIsStart(true);
-          // userInfo1 = userInfo;
-          // userInfo1.total_token = +userInfo1.total_token - 1;
-          // setUserInfo(userInfo1);
-          setIsStart(true);
-          setLoadingGame(false);
-        } else {
-          setIsStart(false);
-          Toast("error", "You don't have enough token to play game");
-        }
-      })
-      .catch((err) => {
-        setLoadingGame(false);
-        setIsStart(false);
-        console.log("Fetch StartGame:", err);
-      });
+    setLoadingGame(false);
+    setIsStart(true);
+    // let postData = { user_id: 11 };
+    // axios
+    //   .post(import.meta.env.VITE_API_URL + "/start_game", postData)
+    //   .then((res) => {
+    //     console.log(res.data[0]);
+    //     setLoadingGame(false);
+    //     if (!res.data[0].error) {
+    //       // setIsStart(true);
+    //       // userInfo1 = userInfo;
+    //       // userInfo1.total_token = +userInfo1.total_token - 1;
+    //       // setUserInfo(userInfo1);
+    //       setIsStart(true);
+    //       setLoadingGame(false);
+    //     } else {
+    //       setIsStart(false);
+    //       Toast("error", "You don't have enough token to play game");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setLoadingGame(false);
+    //     setIsStart(false);
+    //     console.log("Fetch StartGame:", err);
+    //   });
   };
 
   const UpdateScore = (score: number) => {
@@ -600,7 +604,7 @@ export default function Game() {
       .catch((err) => {
         setUserInfo({ ...userInfo, score: score });
         localStorage.setItem("user", JSON.stringify(userInfo));
-        console.log("user1", err);
+        console.log("UpdateScore", err);
       });
   };
 
@@ -613,32 +617,39 @@ export default function Game() {
             <div id="game"></div>
             <div id="score">0</div>
             <div className="game-over text-center">
-              <h2 className="text-sm">Game Over</h2>
-              <h2 className="text-sm">
+              {/* <p className="text-sm">Game Over</p> */}
+              <p className="text-sm">
                 Your Weekly Best Score : {userInfo?.score}
-              </h2>
+              </p>
               <p>Token Remain: {userInfo?.total_token}</p>
-              <p>Tab to start again</p>
+              <p>Tab anywhere to start</p>
+              <div className="mx-4 mt-6">
+                <Button
+                  label="Back to Home"
+                  type="l"
+                  link="/index"
+                  className="w-full py-5"
+                />
+              </div>
             </div>
           </div>
         )}
 
         {!isStart && (
-          <div style={{ backgroundImage: `url(${gameBack})` }} className="fixed top-0 bottom-0 right-0 left-0 bg-contain">
+          <div
+            style={{ backgroundImage: `url(${gameBack})` }}
+            className="fixed top-0 bottom-0 right-0 left-0 bg-contain"
+          >
             <div className="text-center mt-10">
               <p className="text-black mb-2">
                 Remaining Token: {userInfo?.total_token}
               </p>
             </div>
             {score != null && (
-              <div className="text-black mt-10 text-center">
-                <h2 className="text-1xl">Game Over</h2>
-                <h2>Your Score : {score}</h2>
+              <div className="text-black mt-2 text-center">
                 <h2 className="text-1xl">
                   Your Weekly Best Score : {userInfo?.score}
                 </h2>
-                <p>Token Remain: {userInfo?.total_token}</p>
-                {/* <p>Tab to start again</p> */}
               </div>
             )}
 

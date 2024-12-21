@@ -34,9 +34,6 @@ export default function Splash() {
       method: "post",
       url: import.meta.env.VITE_API_URL + "/user",
       data: userData,
-      headers: {
-        "Content-Type": "application/json",
-      },
     })
       .then((res) => {
         console.log("Axios user fetch res", res);

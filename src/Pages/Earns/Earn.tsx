@@ -15,8 +15,14 @@ export default function Earn() {
     console.log(JSON.parse(localStorage.getItem("user")!));
     let avt = JSON.parse(localStorage.getItem("user")!).available_tasks;
     avt.forEach(
-      (element: { isDone: boolean; isLoading: boolean; icon: string }) => {
+      (element: {
+        isDone: boolean;
+        isLoading: boolean;
+        icon: string;
+        isClaim: boolean;
+      }) => {
         element.isDone = false;
+        element.isClaim = false;
         element.isLoading = false;
         element.icon = "line-md:twitter-x";
       }
@@ -26,9 +32,15 @@ export default function Earn() {
     let dt = JSON.parse(localStorage.getItem("user")!).done_tasks;
     if (dt != null) {
       dt.forEach(
-        (element: { isDone: boolean; isLoading: boolean; icon: string }) => {
+        (element: {
+          isDone: boolean;
+          isLoading: boolean;
+          icon: string;
+          isClaim: boolean;
+        }) => {
           element.isDone = true;
           element.isLoading = false;
+          element.isClaim = false;
           element.icon = "line-md:twitter-x";
         }
       );
@@ -37,8 +49,14 @@ export default function Earn() {
   }, []);
 
   const EarnClick = (item: any) => {
+    !item.isClaim ? OpenUrl(item) : ClaimTask();
+  };
+
+  const OpenUrl = (item: any) => {
     console.log("EarnClick", item.type);
-    window.open(item.task_link, "_blank").focus();
+    try {
+      window.open(item.task_link, "_blank").focus();
+    } catch (err) {}
 
     setAvailableTask(
       availableTask.map((task: { id: any }) => {
@@ -48,26 +66,37 @@ export default function Earn() {
         return task;
       })
     );
+    setTimeout(() => {
+      setAvailableTask(
+        availableTask.map((task: { id: any }) => {
+          if (task.id === item.id) {
+            return { ...task, isLoading: false, isClaim: true };
+          }
+          return task;
+        })
+      );
+    }, 5000);
+  };
 
+  const ClaimTask = () => {
+    console.log("claim Task");
     let postData = { user_id: 11, task_id: item.id };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_task", postData)
       .then((res) => {
         console.log("!res.data[0]", res.data[0]);
         if (!res.data[0].error) {
-          setTimeout(() => {
-            const done = availableTask.filter((x) => x.id == item.id);
-            const available = availableTask.filter((x) => x.id != item.id);
-            setAvailableTask(available);
-            setDoneTask([...doneTask, done[0]]);
-            let userInfo = {
-              ...user,
-              available_tasks: available,
-              done_tasks: [...doneTask, done[0]],
-            };
-            setUser(userInfo);
-            localStorage.setItem("user", JSON.stringify(userInfo));
-          }, 5000);
+          const done = availableTask.filter((x) => x.id == item.id);
+          const available = availableTask.filter((x) => x.id != item.id);
+          setAvailableTask(available);
+          setDoneTask([...doneTask, done[0]]);
+          let userInfo = {
+            ...user,
+            available_tasks: available,
+            done_tasks: [...doneTask, done[0]],
+          };
+          setUser(userInfo);
+          localStorage.setItem("user", JSON.stringify(userInfo));
         }
       })
       .catch((err) => {
@@ -95,7 +124,7 @@ export default function Earn() {
               {!item.isLoading ? (
                 <Button
                   onClick={() => EarnClick(item)}
-                  label="Start"
+                  label={item.isClaim ? "Claim" : "Start"}
                   className=""
                 />
               ) : (
