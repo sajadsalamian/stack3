@@ -560,31 +560,31 @@ export default function Game() {
     console.log("start game", string);
     setLoadingGame(true);
 
-    setLoadingGame(false);
-    setIsStart(true);
-    // let postData = { user_id: 11 };
-    // axios
-    //   .post(import.meta.env.VITE_API_URL + "/start_game", postData)
-    //   .then((res) => {
-    //     console.log(res.data[0]);
-    //     setLoadingGame(false);
-    //     if (!res.data[0].error) {
-    //       // setIsStart(true);
-    //       // userInfo1 = userInfo;
-    //       // userInfo1.total_token = +userInfo1.total_token - 1;
-    //       // setUserInfo(userInfo1);
-    //       setIsStart(true);
-    //       setLoadingGame(false);
-    //     } else {
-    //       setIsStart(false);
-    //       Toast("error", "You don't have enough token to play game");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setLoadingGame(false);
-    //     setIsStart(false);
-    //     console.log("Fetch StartGame:", err);
-    //   });
+    // setLoadingGame(false);
+    // setIsStart(true);
+    let postData = { user_id: 11 };
+    axios
+      .post(import.meta.env.VITE_API_URL + "/start_game", postData)
+      .then((res) => {
+        console.log(res.data[0]);
+        setLoadingGame(false);
+        if (!res.data[0].error) {
+          // setIsStart(true);
+          // userInfo1 = userInfo;
+          // userInfo1.total_token = +userInfo1.total_token - 1;
+          // setUserInfo(userInfo1);
+          setIsStart(true);
+          setLoadingGame(false);
+        } else {
+          setIsStart(false);
+          Toast("error", "You don't have enough token to play game");
+        }
+      })
+      .catch((err) => {
+        setLoadingGame(false);
+        setIsStart(false);
+        console.log("Fetch StartGame:", err);
+      });
   };
 
   const UpdateScore = (score: number) => {
