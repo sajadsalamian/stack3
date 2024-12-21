@@ -1,4 +1,3 @@
-import { initData } from "@telegram-apps/sdk-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Table from "../../components/Elements/Table";
