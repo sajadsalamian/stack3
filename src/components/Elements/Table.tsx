@@ -20,7 +20,13 @@ export default function Table({ headers = [], data = [] }) {
         <tbody className="text-gray-700">
           {data.map((item, index) => (
             <tr>
-              <td className="text-center py-3 px-4 text-sm">{index + 1}</td>
+              <td
+                className={`text-center py-3 px-4 text-sm ${
+                  item.isSelf == "1" && "font-bold"
+                }`}
+              >
+                {index + 1}
+              </td>
               {headers.map((head: String, index: Key) => (
                 <td className={`text-center py-3 px-4 text-sm`} key={index}>
                   {head.includes("image") ? (
@@ -30,11 +36,7 @@ export default function Table({ headers = [], data = [] }) {
                       alt="بدون تصویر"
                     />
                   ) : (
-                    <span
-                      className={
-                        data.isSelf != null && data.isSelf == 1 && "text-bold"
-                      }
-                    >
+                    <span className={item.isSelf == "1" && "font-bold"}>
                       {item[head]}
                     </span>
                   )}

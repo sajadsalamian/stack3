@@ -12,7 +12,7 @@ export default function Splash() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let userData = { user_id: 11, user_name: "saeed" };
+    let userData = { user_id: 15, user_name: "new Sajad" };
 
     try {
       setIsTelegram(true);
@@ -27,7 +27,7 @@ export default function Splash() {
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
-      setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
+      // setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
 
     axios({

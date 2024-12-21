@@ -4,7 +4,7 @@ import Table from "../../components/Elements/Table";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 
 export default function Leaderboard() {
-  const headers = ["user_name", "score", "isSelf"];
+  const headers = ["user_name", "score"];
   const [data, setData]: any = useState([]);
   const [user, setUser] = useState({});
 
