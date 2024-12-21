@@ -4,7 +4,7 @@ import Table from "../../components/Elements/Table";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 
 export default function Leaderboard() {
-  const headers = ["user_name", "score"];
+  const headers = ["user_name", "score", "isSelf"];
   const [data, setData]: any = useState([]);
   const [user, setUser] = useState({});
 
@@ -20,7 +20,7 @@ export default function Leaderboard() {
       .then((res) => {
         console.log("Axios leaderboard fetch res", res.data);
         res.data.forEach((element: { isSelf: boolean; user_id: any; }) => {
-          element.isSelf = (element.user_id == user.user_id )?  true : false;
+          element.isSelf = (element.user_id && element.user_id == user.user_id ) ?  "true" : "false";
         });
         setData(res.data);
       })

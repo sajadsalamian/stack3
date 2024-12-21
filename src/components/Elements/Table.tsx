@@ -12,7 +12,7 @@ export default function Table({ headers = [], data = [] }) {
                 className={"text-center py-3 px-4 text-sm text-white"}
                 key={index}
               >
-                {item}
+                {item.replace(/_/g, "")}
               </th>
             ))}
           </tr>
@@ -22,7 +22,12 @@ export default function Table({ headers = [], data = [] }) {
             <tr>
               <td className="text-center py-3 px-4 text-sm">{index + 1}</td>
               {headers.map((head: String, index: Key) => (
-                <td className={`text-center py-3 px-4 text-sm ${data.isSelf != null &&data.isSelf && "text-bold"}`} key={index}>
+                <td
+                  className={`text-center py-3 px-4 text-sm ${
+                    data.isSelf != null && data.isSelf && "text-bold"
+                  }`}
+                  key={index}
+                >
                   {head.includes("image") ? (
                     <img
                       src={item[head]}
