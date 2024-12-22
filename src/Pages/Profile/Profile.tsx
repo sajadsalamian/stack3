@@ -170,7 +170,11 @@ export default function Profile() {
       Toast("error", message);
     }
 
-    let postData = { user_id: user.user_id, token_amount: Number(tokenCount), hash: "" };
+    let postData = {
+      user_id: user.user_id,
+      token_amount: Number(tokenCount),
+      hash: "",
+    };
     axios
       .post(import.meta.env.VITE_API_URL + "/buy_token", postData)
       .then((res) => {
@@ -198,29 +202,34 @@ export default function Profile() {
     <Main title="Profile">
       <HeadMeta title="Profile" />
       <div className="mb-5 pt-5">
-        {user ? (
-          <div className="text-center text-gray-200">
-            <img
-              src={
-                user.photoUrl && user.photoUrl.length > 2
-                  ? user.photoUrl
-                  : empImage
-              }
-              alt=""
-              className="w-12 h-12 rounded-full mx-auto mb-5"
-            />
-            {/* <p className="mb-2">username : {user.user_name}</p> */}
-            <p className="mb-2">
-              Username : {user.user_name}
-            </p>
-            <p>Weekly Best Score: {user.score}</p>
-            <p>Token: {user.total_token}</p>
+        <div className="text-center flex flex-col items-center">
+          <img
+            src={
+              user.photoUrl && user.photoUrl.length > 2
+                ? user.photoUrl
+                : empImage
+            }
+            alt=""
+            className="w-20 h-20 rounded-full mx-auto mb-5 bg-primary p-2"
+          />
+          <div className="h-20 w-36 bg-primary rounded-tl-full rounded-tr-full mb-2"></div>
+          <div className="mb-2 bg-primary w-36 text-2xl rounded-lg">
+            {user.user_name}
           </div>
-        ) : (
-          <p>not Defined</p>
-        )}
+          <div className="grid grid-cols-2 w-36 gap-x-2">
+            <div className="bg-primary text-black py-3 rounded-2xl w-full text-center">
+              <div>TOKEN</div>
+              <div>{user?.total_token}</div>
+            </div>
+            <div className="bg-primary text-black py-3 rounded w-full text-center">
+              <div>SCORE</div>
+              <div>{user?.score}</div>
+            </div>
+          </div>
+          {/* <div className="h-20 w-36 bg-primary rounded-bl-full rounded-br-full mt-2"></div> */}
+        </div>
       </div>
-      <div className="p-2  text-center  overflow-hidden">
+      <div className="p-2  text-center  overflow-hidden mb-10">
         {ethereum.isConnected() ? (
           <>
             {user.wallet_address && (
@@ -234,23 +243,6 @@ export default function Profile() {
                   )}
               </p>
             )}
-            <div className="mb-10 flex gap-4 justify-center">
-              {/* <Button
-                label="Sign Message"
-                onClick={SignWallet}
-                className="mb-5"
-              />
-              <Button
-                label="Change Chain"
-                onClick={ChangeChain}
-                className="mb-5"
-              /> */}
-              <Button
-                label="Disconnect Wallet"
-                onClick={DisconnectWallet}
-                className="mb-5"
-              />
-            </div>
             <div className="w-40 mx-auto">
               <Input
                 onChange={(e: { target: { value: SetStateAction<number> } }) =>
@@ -275,6 +267,13 @@ export default function Profile() {
                   />
                 </div>
               )}
+            </div>
+            <div className="mb-10 flex gap-4 justify-center">
+              <Button
+                label="Disconnect Wallet"
+                onClick={DisconnectWallet}
+                className="mb-5"
+              />
             </div>
           </>
         ) : (

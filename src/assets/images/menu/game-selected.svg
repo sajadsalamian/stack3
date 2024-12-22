@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 31.85 53.71" style="enable-background:new 0 0 31.85 53.71;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#17181D;}
+	.st2{fill:#E5BC03;}
+	.st3{fill:none;stroke:#E5BC03;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#E5BC03;stroke-width:2;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#E5BC03;stroke-width:0.5208;stroke-miterlimit:10;}
+	.st6{fill:#D0CBC7;}
+	.st7{fill:#666666;}
+	.st8{font-family:'PlacardMT-Condensed';}
+	.st9{font-size:15px;}
+</style>
+<g>
+	<g>
+		<path class="st2" d="M31.85,19.75v11.47c0,0.35-0.29,0.64-0.64,0.64H19.75c-0.35,0-0.64-0.29-0.64-0.64V19.75
+			c0-0.35,0.29-0.64,0.64-0.64h11.47C31.57,19.11,31.85,19.4,31.85,19.75z"/>
+		<polygon class="st2" points="14.67,12.74 0,12.74 7.33,0 		"/>
+		<circle class="st2" cx="25.48" cy="6.37" r="6.37"/>
+		<g>
+			<g>
+				<polygon class="st2" points="9.64,25.48 13.7,29.55 11.4,31.85 7.33,27.79 3.27,31.85 0.96,29.55 5.03,25.48 0.96,21.42 
+					2.12,20.27 3.27,19.11 7.33,23.18 11.4,19.11 12.55,20.27 13.7,21.42 				"/>
+			</g>
+		</g>
+	</g>
+	<text transform="matrix(1 0 0 1 4.2419 53.6103)" class="st2 st8 st9">GAME</text>
+</g>
+</svg>

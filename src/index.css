@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+font-face {
+  font-family: "mainfont";
+  src: local("mainfont"), url(./assets/plcc.TTF) format("woff");
+}
+
+html,
+body {
+  font-family: mainfont !important;
+}
+
+tr:first-child td:first-child {
+  border-top-left-radius: 10px;
+}
+tr:first-child td:last-child {
+  border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+tr:first-child td {
+  border-top-style: solid;
+}
+tr td:first-child {
+  border-left-style: solid;
+}
+
 #container {
   width: 100%;
   height: 100%;

@@ -107,6 +107,7 @@ export default function Earn() {
   return (
     <Main>
       <HeadMeta title="Earn more token" />
+      <h2 className="text-white font-bold text-center my-2 mx-8">Complete the below task to get free tokens</h2>
       <div className=" p-2">
         {availableTask.map((item: any, index: number) => (
           <div
@@ -120,15 +121,20 @@ export default function Earn() {
               className="text-gray-600"
             />
             <p className="text-gray-600 text-[14px]">{item.title}</p>
-            <div className="ml-auto">
+            <div className="ml-auto flex gap-x-2 items-center">
               {!item.isLoading ? (
-                <Button
-                  onClick={() =>
-                    item.isClaim ? ClaimTask(item) : EarnClick(item)
-                  }
-                  label={item.isClaim ? "Claim" : "Start"}
-                  className=""
-                />
+                <>
+                  <span className="text-gray-600 text-[14px] bg-primary px-2 py-2 rounded-md">
+                    +3
+                  </span>
+                  <Button
+                    onClick={() =>
+                      item.isClaim ? ClaimTask(item) : EarnClick(item)
+                    }
+                    label={item.isClaim ? "Claim" : "Start"}
+                    className="text-sm"
+                  />
+                </>
               ) : (
                 <RotatingLines
                   visible={true}
@@ -156,11 +162,14 @@ export default function Earn() {
                 className="text-gray-600"
               />
               <p className="text-gray-600 text-[14px]">{item.title}</p>
-              <div className="ml-auto">
+              <div className="ml-auto flex gap-x-2">
+                <span className="bg-gray-700 text-gray-500 text-[14px] px-2 py-2 rounded-md">
+                  0
+                </span>
                 <Button
                   onClick={() => EarnClick(item)}
                   label="Claimed"
-                  className=""
+                  className="text-sm"
                   disabled={true}
                 />
               </div>

@@ -643,20 +643,17 @@ export default function Game() {
             style={{ backgroundImage: `url(${gameBack})` }}
             className="fixed top-0 bottom-0 right-0 left-0 bg-contain"
           >
-            <div className="text-center mt-10">
-              <p className="text-black mb-2">
-                Remaining Token: {userInfo?.total_token}
-              </p>
-            </div>
-            {score != null && (
-              <div className="text-black mt-2 text-center">
-                <h2 className="text-1xl">
-                  Your Weekly Best Score : {userInfo?.score}
-                </h2>
+            <div className=" mt-10 flex justify-between px-4 text-center">
+              <div className="bg-primary text-black p-3 rounded-2xl w-16">
+                <div>token</div>
+                <div>{userInfo?.total_token}</div>
               </div>
-            )}
-
-            <div className="fixed bottom-5 left-4 right-4 bottom-28 flex justify-center items-center">
+              <div className="bg-primary text-black p-3 rounded-2xl w-16">
+                <div>score</div>
+                <div>{userInfo?.score}</div>
+              </div>
+            </div>
+            <div className="fixed left-4 right-4 bottom-24 flex justify-center items-center">
               {!loadingGame ? (
                 <div className="flex gap-2 w-full">
                   <Button

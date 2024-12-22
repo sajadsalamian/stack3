@@ -33,6 +33,7 @@ export default function Leaderboard() {
   return (
     <Main>
       <HeadMeta title="Leaderboard" />
+      <h2 className="text-center my-3 text-white text-2xl uppercase"><span className="text-primary">Nitor</span> Leaderboard</h2>
       <div className="p-2 w-full text-center">
         <Table headers={headers} data={data} />
       </div>

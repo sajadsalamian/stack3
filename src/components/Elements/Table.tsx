@@ -3,13 +3,13 @@ import { Key } from "react";
 export default function Table({ headers = [], data = [] }) {
   return (
     <div className="w-full shadow-xl">
-      <table className="w-full bg-white overflow-x-auto md:table-fixed">
-        <thead className="bg-primary">
+      <table className="w-full overflow-x-auto md:table-fixed">
+        <thead className="">
           <tr>
-            <th className={"text-center py-3 px-4 text-sm text-white"}>#</th>
+            <th className={"text-center py-3 px-4 text-sm text-primary"}>#</th>
             {headers.map((item: String, index: Key) => (
               <th
-                className={"text-center py-3 px-4 text-sm text-white"}
+                className={"text-center py-3 px-4 text-sm text-primary"}
                 key={index}
               >
                 {item.replace(/_/g, "")}
@@ -19,9 +19,9 @@ export default function Table({ headers = [], data = [] }) {
         </thead>
         <tbody className="text-gray-700">
           {data.map((item, index) => (
-            <tr>
+            <tr className="bg-[#666666] text-white border-b-4 border-dark-black rounded-lg">
               <td
-                className={`text-center py-3 px-4 text-sm ${
+                className={`text-center py-3 px-4 text-sm text-black ${
                   item.isSelf == "1" && "font-bold"
                 }`}
               >
@@ -36,7 +36,7 @@ export default function Table({ headers = [], data = [] }) {
                       alt="بدون تصویر"
                     />
                   ) : (
-                    <span className={item.isSelf == "1" && "font-bold"}>
+                    <span className={item.isSelf == "1" && "font-bold text-primary"}>
                       {item[head]}
                     </span>
                   )}

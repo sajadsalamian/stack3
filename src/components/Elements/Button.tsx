@@ -4,18 +4,18 @@ import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 export const buttonStyle = cva(
-  "rounded-md px-4  py-2 text-xs font-semibold shadow-sm relative text-center",
+  "rounded-md px-4  py-2 text-base font-semibold shadow-sm relative text-center",
   {
     variants: {
       variant: {
         primary: [
-          "bg-primary text-white hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          "bg-primary text-black hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         ],
         primary2: [
-          "bg-primary  text-white hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          "bg-primary  text-black hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         ],
-        secondary: ["bg-secondary text-white"],
-        white_outline: ["text-white border border-white"],
+        secondary: ["bg-secondary text-black"],
+        white_outline: ["text-black border border-black"],
         primary_outline: ["text-primary border border-primary"],
         secondary_outline: ["text-secondary border border-secondary"],
         none: ["shadow-none"],

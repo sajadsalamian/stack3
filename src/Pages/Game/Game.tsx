@@ -617,7 +617,6 @@ export default function Game() {
             <div id="game"></div>
             <div id="score">0</div>
             <div className="game-over text-center">
-              {/* <p className="text-sm">Game Over</p> */}
               <p className="text-sm">
                 Your Weekly Best Score : {userInfo?.score}
               </p>
