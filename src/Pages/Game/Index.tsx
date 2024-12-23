@@ -17,7 +17,7 @@ export default function Game() {
   const [score, setScore]: any = useState(null);
   const [showMenu, setShowMenu] = useState(true);
 
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [tokenCount, setTokenCount] = useState(0);
   const [loadingBuy, setLoadingBuy] = useState(false); // duplicate variable
 
