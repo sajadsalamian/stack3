@@ -573,7 +573,7 @@ export default function Game() {
         } else {
           setIsStart(false);
           setShowMenu(true);
-          Toast("error", "You don't have enough token to play game");
+          Toast("error", "Please buy more token from profile page.");
         }
       })
       .catch((err) => {
@@ -637,12 +637,12 @@ export default function Game() {
             style={{ backgroundImage: `url(${gameBack})` }}
             className="fixed top-0 bottom-0 right-0 left-0 bg-contain"
           >
-            <div className=" mt-10 flex justify-between px-4 text-center">
-              <div className="bg-primary text-black p-3 rounded-2xl w-16">
+            <div className=" mt-10 flex justify-between px-4 text-center uppercase">
+              <div className="bg-primary text-black p-3 rounded-2xl w-20">
                 <div>token</div>
                 <div>{userInfo?.total_token}</div>
               </div>
-              <div className="bg-primary text-black p-3 rounded-2xl w-16">
+              <div className="bg-primary text-black p-3 rounded-2xl w-20">
                 <div>score</div>
                 <div>{userInfo?.score}</div>
               </div>

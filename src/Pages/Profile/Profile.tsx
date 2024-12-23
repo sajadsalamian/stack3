@@ -7,6 +7,7 @@ import Input from "../../components/Elements/Input";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 import empImage from "../../assets/images/user_profile_white.png";
+import { div, p } from "framer-motion/client";
 
 export default function Profile() {
   const [user, setUser]: any = useState({});
@@ -277,11 +278,14 @@ export default function Profile() {
             </div>
           </>
         ) : (
-          <Button
-            label="Connect Wallet"
-            onClick={ConnectToWallet}
-            className="mb-5"
-          />
+          <div>
+            <p className="text-white mb-1 uppercase">Please connect wallet to buy tokens.</p>
+            <Button
+              label="Connect Wallet"
+              onClick={ConnectToWallet}
+              className="mb-5"
+            />
+          </div>
         )}
       </div>
     </Main>

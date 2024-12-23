@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 export const buttonStyle = cva(
-  "rounded-md px-4  py-2 text-base font-semibold shadow-sm relative text-center",
+  "rounded-md px-4  py-2 text-base font-semibold shadow-sm relative text-center uppercase",
   {
     variants: {
       variant: {
