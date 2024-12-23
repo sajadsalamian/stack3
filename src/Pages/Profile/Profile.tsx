@@ -168,33 +168,6 @@ export default function Profile() {
       setLoadingBuy(false);
       Toast("error", message);
     }
-
-    let postData = {
-      user_id: user.user_id,
-      token_amount: Number(tokenCount),
-      hash: "",
-    };
-    axios
-      .post(import.meta.env.VITE_API_URL + "/buy_token", postData)
-      .then((res) => {
-        console.log(res.data[0]);
-        if (!res.data[0].error) {
-          Toast("s", "Transaction Successfully.");
-          setUser({ ...user, total_token: user.total_token + tokenCount });
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              ...user,
-              total_token: +user.total_token + +tokenCount,
-            })
-          );
-        } else {
-          Toast("e", res.data[0].message);
-        }
-      })
-      .catch((err) => {
-        console.log("Fetch user Data Error:", err);
-      });
   };
 
   return (

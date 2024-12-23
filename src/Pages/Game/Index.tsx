@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import Button from "../../components/Elements/Button";
 import * as THREE from "three";
@@ -6,14 +6,20 @@ import axios from "axios";
 import { Toast } from "../../components/Layouts/Main/Helper";
 import { RotatingLines } from "react-loader-spinner";
 import gameBack from "../../assets/images/game_back.png";
+import Input from "../../components/Elements/Input";
+import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 
 export default function Game() {
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo]: any = useState(null);
   const [isStart, setIsStart] = useState(false);
   const [loadingGame, setLoadingGame] = useState(false);
   const [gaming, setGaming]: any = useState(null);
   const [score, setScore]: any = useState(null);
   const [showMenu, setShowMenu] = useState(true);
+
+  const [showModal, setShowModal] = useState(true);
+  const [tokenCount, setTokenCount] = useState(0);
+  const [loadingBuy, setLoadingBuy] = useState(false); // duplicate variable
 
   useEffect(() => {
     let userInfo1 = JSON.parse(localStorage.getItem("user"));
@@ -573,7 +579,8 @@ export default function Game() {
         } else {
           setIsStart(false);
           setShowMenu(true);
-          Toast("error", "Please buy more token from profile page.");
+          Toast("error", "You don't have any token to play a game.");
+          setShowModal(true);
         }
       })
       .catch((err) => {
@@ -603,6 +610,84 @@ export default function Game() {
         localStorage.setItem("user", JSON.stringify(userInfo));
         console.log("UpdateScore", err);
       });
+  };
+
+  const { ethereum } = new WalletTgSdk({
+    injected: true, // default: false
+  });
+
+  const BuyToken = async () => {
+    if (tokenCount < 1) {
+      Toast("w", "Please enter number more than 0");
+      return;
+    }
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xcc" }],
+      });
+
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      const transactionParameters = {
+        to: "0xaddbc186a3902392aa6c19908197ba80f654adf9",
+        from: accounts[0],
+        value: tokenCount * (0.001 * 10 ** 18),
+        chainId: "0xcc",
+      };
+
+      setLoadingBuy(true);
+      const txHash = await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionParameters],
+      });
+
+      console.log("Transaction sent:", txHash);
+
+      let postData = {
+        user_id: userInfo.user_id,
+        token_amount: Number(tokenCount),
+        hash: txHash,
+      };
+      axios
+        .post(import.meta.env.VITE_API_URL + "/buy_token", postData)
+        .then((res) => {
+          console.log(res.data[0]);
+          if (!res.data[0].error) {
+            Toast("s", "Wallet Address Update Successfully.");
+            setUserInfo({
+              ...userInfo,
+              total_token: userInfo.total_token + tokenCount,
+            });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                ...userInfo,
+                total_token: Number(userInfo.total_token) + Number(tokenCount),
+              })
+            );
+          } else {
+            Toast("e", res.data[0].message);
+          }
+        })
+        .catch((err) => {
+          console.log("Fetch user Data Error:", err);
+        });
+      setLoadingBuy(false);
+      Toast("success", "You Charge Successfully");
+
+      userInfo.total_token = +userInfo.total_token + +tokenCount;
+      localStorage.setItem("user", JSON.stringify(userInfo));
+    } catch (error: any) {
+      console.log("Failed to send transaction:", error);
+      let message = "error on transaction";
+      switch (error.code) {
+        case 4001:
+          message = "Transaction canceled by user.";
+          break;
+      }
+      setLoadingBuy(false);
+      Toast("error", message);
+    }
   };
 
   return (
@@ -672,6 +757,42 @@ export default function Game() {
           </div>
         )}
       </div>
+      {showModal && (
+        <div className="fixed top-0 bottom-0 left-0 right-0 bg-black/60 z-[1000]">
+          <div
+            className="w-full h-full"
+            onClick={() => setShowModal(false)}
+          ></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-4">
+            <div className="w-60 mx-auto bg-black pt-4 pb-12 rounded-3xl flex flex-col items-center">
+              <h2 className="text-primary mb-2 text-2xl">BUY TOKENS</h2>
+              <Input
+                onChange={(e: { target: { value: SetStateAction<number> } }) =>
+                  setTokenCount(e.target.value)
+                }
+                error={undefined}
+                label="Number of token"
+                value={tokenCount}
+                onBlur={undefined}
+              />
+              {!loadingBuy ? (
+                <Button label="Buy Token" onClick={BuyToken} className="mb-5" />
+              ) : (
+                <div className="flex justify-center items-center">
+                  <RotatingLines
+                    visible={true}
+                    height="24"
+                    width="24"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    ariaLabel="rotating-lines-loading"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </Main>
   );
 }
