@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-font-face {
-  font-family: "mainfont";
-  src: local("mainfont"), url(./assets/plcc.TTF) format("woff");
+@font-face {
+  font-family: "mainfont"; /*Can be any text*/
+  src: local("AirbnbCerealLight"),
+    url("./assets/plcc.TTF") format("truetype");
 }
 
 html,
 body {
-  font-family: mainfont !important;
+  font-family: "mainfont" !important;
 }
 
 tr:first-child td:first-child {
