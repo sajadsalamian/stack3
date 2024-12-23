@@ -45,8 +45,8 @@ export default function Header() {
               <Link to={item.route}>
                 <img
                   src={location.pathname.includes(item.route) ? item.iconAc : item.icon}
-                  width="48"
-                  height="48"
+                  width="58"
+                  height="58"
                 />
               </Link>
             </li>

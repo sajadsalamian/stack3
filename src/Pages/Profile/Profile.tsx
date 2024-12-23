@@ -227,7 +227,7 @@ export default function Profile() {
               <div>{user?.score}</div>
             </div>
           </div>
-          {/* <div className="h-20 w-36 bg-primary rounded-bl-full rounded-br-full mt-2"></div> */}
+          <div className="h-20 w-36 bg-primary rounded-bl-full rounded-br-full mt-2"></div>
         </div>
       </div>
       <div className="p-2  text-center  overflow-hidden mb-10">
