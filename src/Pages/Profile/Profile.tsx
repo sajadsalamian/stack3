@@ -201,16 +201,7 @@ export default function Profile() {
     <Main title="Profile">
       <HeadMeta title="Profile" />
       <div className="mb-5 pt-5">
-        <div className="text-center flex flex-col items-center">
-          {/* <img
-            src={
-              user.photoUrl && user.photoUrl.length > 2
-                ? user.photoUrl
-                : empImage
-            }
-            alt=""
-            className="w-20 h-20 rounded-full mx-auto mb-5 bg-primary p-2"
-          /> */}
+        <div className="text-center flex flex-col items-center mt-10">
           <div className="h-20 w-36 bg-primary rounded-tl-full rounded-tr-full mb-2"></div>
           <div className="mb-2 bg-primary w-36 text-2xl rounded-lg">
             {user.user_name}
@@ -277,7 +268,7 @@ export default function Profile() {
           </>
         ) : (
           <div>
-            <p className="text-white mb-1 uppercase">Please connect wallet to buy tokens.</p>
+            <p className="text-white mb-2 uppercase">Please connect wallet to buy tokens.</p>
             <Button
               label="Connect Wallet"
               onClick={ConnectToWallet}
