@@ -561,19 +561,13 @@ export default function Game() {
     console.log("start game", string);
     setLoadingGame(true);
     setShowMenu(false);
-    // setLoadingGame(false);
-    // setIsStart(true);
-    let postData = { user_id: 11 };
+    let postData = { user_id: userInfo.user_id };
     axios
       .post(import.meta.env.VITE_API_URL + "/start_game", postData)
       .then((res) => {
         console.log(res.data[0]);
         setLoadingGame(false);
         if (!res.data[0].error) {
-          // setIsStart(true);
-          // userInfo1 = userInfo;
-          // userInfo1.total_token = +userInfo1.total_token - 1;
-          // setUserInfo(userInfo1);
           setIsStart(true);
           setLoadingGame(false);
         } else {
