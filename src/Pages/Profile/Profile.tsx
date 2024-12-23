@@ -6,8 +6,6 @@ import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 import Input from "../../components/Elements/Input";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
-import empImage from "../../assets/images/user_profile_white.png";
-import { div, p } from "framer-motion/client";
 
 export default function Profile() {
   const [user, setUser]: any = useState({});
@@ -204,7 +202,7 @@ export default function Profile() {
       <HeadMeta title="Profile" />
       <div className="mb-5 pt-5">
         <div className="text-center flex flex-col items-center">
-          <img
+          {/* <img
             src={
               user.photoUrl && user.photoUrl.length > 2
                 ? user.photoUrl
@@ -212,7 +210,7 @@ export default function Profile() {
             }
             alt=""
             className="w-20 h-20 rounded-full mx-auto mb-5 bg-primary p-2"
-          />
+          /> */}
           <div className="h-20 w-36 bg-primary rounded-tl-full rounded-tr-full mb-2"></div>
           <div className="mb-2 bg-primary w-36 text-2xl rounded-lg">
             {user.user_name}
