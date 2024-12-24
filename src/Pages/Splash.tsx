@@ -17,20 +17,18 @@ export default function Splash() {
 
     try {
       setIsTelegram(true);
-      Toast('s', '1');
       const { initDataRaw, initData } = retrieveLaunchParams();
-      Toast('s', '2');
       setInitData(initData);
-      Toast('s', '3');
       setInitDataRaw(initDataRaw);
-      Toast('s', '4');
-      setUser(initData?.user);
-      Toast('s', '5');
+      console.log("initData", initData);
+      console.log("initDataRaw", initDataRaw);
+      // setUser(initData?.user);
       userData = {
         user_id: initData?.user.id,
         user_name: initData?.user.username,
+        initial_token: 3,
       };
-      Toast('s', '6');
+      Toast("s", "6");
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
