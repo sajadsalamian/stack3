@@ -20,23 +20,20 @@ export default function Splash() {
       const { initDataRaw, initData } = retrieveLaunchParams();
       setInitData(initData);
       setInitDataRaw(initDataRaw);
-      console.log("initData", initData);
-      console.log("initDataRaw", initDataRaw);
-      // setUser(initData?.user);
+      console.log("initData", initData?.user);
       userData = {
         user_id: initData?.user.id,
         user_name: initData?.user.username,
         initial_token: 3,
       };
-      Toast("s", "6");
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
-      // setUser({ photoUrl: splash, firstName: "SaJaD", username: "sir_boobby" });
     }
 
     axios({
       method: "post",
+      responseType: 'json',
       url: import.meta.env.VITE_API_URL + "/user",
       data: userData,
     })
@@ -49,6 +46,9 @@ export default function Splash() {
       })
       .catch((err) => {
         console.log("Fetch user Data Error:", err);
+        if (err.response) {
+          console.log("Fetch user Data Error Response:", err.response);
+        }
         localStorage.setItem(
           "user",
           JSON.stringify({
@@ -77,7 +77,6 @@ export default function Splash() {
             ],
           })
         );
-        // navigate("/index");
       });
   }, []);
 
