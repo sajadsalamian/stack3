@@ -2,8 +2,8 @@ import { Key } from "react";
 
 export default function Table({ headers = [], data = [] }) {
   return (
-    <div className="w-full shadow-xl">
-      <table className="w-full overflow-x-auto md:table-fixed">
+    <div className="w-full pb-20">
+      <table className="w-full overflow-x-auto md:table-fixed  overflow-y-auto">
         <thead className="">
           <tr>
             <th className={"text-center py-3 px-4 text-sm text-primary"}>#</th>

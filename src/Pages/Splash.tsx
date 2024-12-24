@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import splash from "../assets/images/splash.png";
 import axios from "axios";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
+import { Toast } from "../components/Layouts/Main/Helper";
 
 export default function Splash() {
   const [user, setUser] = useState({});
@@ -12,18 +13,24 @@ export default function Splash() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let userData = { user_id: 15, user_name: "new Sajad" };
+    let userData = { user_id: 50, user_name: "test50" };
 
     try {
       setIsTelegram(true);
+      Toast('s', '1');
       const { initDataRaw, initData } = retrieveLaunchParams();
+      Toast('s', '2');
       setInitData(initData);
+      Toast('s', '3');
       setInitDataRaw(initDataRaw);
+      Toast('s', '4');
       setUser(initData?.user);
+      Toast('s', '5');
       userData = {
         user_id: initData?.user.id,
         user_name: initData?.user.username,
       };
+      Toast('s', '6');
     } catch (error) {
       setIsTelegram(false);
       console.log("Not Telegram");
@@ -40,12 +47,7 @@ export default function Splash() {
         res.data.photo_url = initData?.user.photoUrl;
         setUser(res.data);
         localStorage.setItem("user", JSON.stringify(res.data));
-
-        if (!res.data.is_first_time) {
-          navigate("/intro");
-        } else {
-          navigate("/index");
-        }
+        navigate("/intro");
       })
       .catch((err) => {
         console.log("Fetch user Data Error:", err);

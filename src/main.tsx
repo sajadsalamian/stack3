@@ -7,7 +7,6 @@ import Leaderboard from "./Pages/Leaderboards/Leaderboard.tsx";
 import Index from "./Pages/Game/Index.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
 import Intro from "./Pages/Intro/Intro.tsx";
-import Game from "./Pages/Game/Game.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <div>
@@ -16,7 +15,6 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<Splash />} />
         <Route path="/intro" element={<Intro />} />
         <Route path="/index" element={<Index />} />
-        <Route path="/game/play" element={<Game />} />
         <Route path="/earn" element={<Earn />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
