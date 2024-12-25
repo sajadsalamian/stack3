@@ -3,14 +3,14 @@ import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import Button from "../../components/Elements/Button";
 import * as THREE from "three";
 import axios from "axios";
-import { Toast } from "../../components/Layouts/Main/Helper";
+import { FetchUser, Toast } from "../../components/Layouts/Main/Helper";
 import { RotatingLines } from "react-loader-spinner";
 import gameBack from "../../assets/images/game_back.png";
 import Input from "../../components/Elements/Input";
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 
 export default function Game() {
-  const [userInfo, setUserInfo]: any = useState(null);
+  const [user, setUser]: any = useState(null);
   const [isStart, setIsStart] = useState(false);
   const [loadingGame, setLoadingGame] = useState(false);
   const [gaming, setGaming]: any = useState(null);
@@ -23,14 +23,28 @@ export default function Game() {
 
   useEffect(() => {
     let userInfo1 = JSON.parse(localStorage.getItem("user"));
-    setUserInfo(userInfo1);
+    let postData = {
+      user_id: "" + userInfo1.user_id,
+      user_name: userInfo1.user_name,
+    };
+    axios({
+      method: "post",
+      url: import.meta.env.VITE_API_URL + "/user",
+      data: postData,
+    })
+      .then((res) => {
+        console.log("Axios user fetch res", res);
+        setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+      })
+      .catch((err) => {
+        console.log("Fetch user Data Error:", err);
+        if (err.response) {
+          console.log("Fetch user Data Error Response:", err.response);
+        }
+        Toast("e", "Server Error, Please try again.");
+      });
   }, []);
-
-  useEffect(() => {
-    console.log("userinfo change", userInfo);
-    if (userInfo != null && userInfo.user_id != null && !isStart) {
-    }
-  }, [userInfo]);
 
   useEffect(() => {
     console.log("score", score);
@@ -567,7 +581,7 @@ export default function Game() {
     console.log("start game", string);
     setLoadingGame(true);
     setShowMenu(false);
-    let postData = { user_id: userInfo.user_id };
+    let postData = { user_id: user.user_id };
     axios
       .post(import.meta.env.VITE_API_URL + "/start_game", postData)
       .then((res) => {
@@ -654,15 +668,15 @@ export default function Game() {
           console.log(res.data[0]);
           if (!res.data[0].error) {
             Toast("s", "Wallet Address Update Successfully.");
-            setUserInfo({
-              ...userInfo,
-              total_token: userInfo.total_token + tokenCount,
+            setUser({
+              ...user,
+              total_token: user.total_token + tokenCount,
             });
             localStorage.setItem(
               "user",
               JSON.stringify({
-                ...userInfo,
-                total_token: Number(userInfo.total_token) + Number(tokenCount),
+                ...user,
+                total_token: Number(user.total_token) + Number(tokenCount),
               })
             );
           } else {
@@ -675,8 +689,8 @@ export default function Game() {
       setLoadingBuy(false);
       Toast("success", "You Charge Successfully");
 
-      userInfo.total_token = +userInfo.total_token + +tokenCount;
-      localStorage.setItem("user", JSON.stringify(userInfo));
+      user.total_token = +user.total_token + +tokenCount;
+      localStorage.setItem("user", JSON.stringify(user));
     } catch (error: any) {
       console.log("Failed to send transaction:", error);
       let message = "error on transaction";
@@ -700,19 +714,9 @@ export default function Game() {
             <div id="score">0</div>
             <div className="game-over text-center">
               {/* <p className="text-sm">Game Over</p> */}
-              <p className="text-sm">
-                Your Weekly Best Score : {userInfo?.score}
-              </p>
-              <p>Token Remain: {userInfo?.total_token}</p>
+              <p className="text-sm">Your Weekly Best Score : {user?.score}</p>
+              <p>Token Remain: {user?.total_token}</p>
               <p>Tab anywhere to start</p>
-              <div className="mx-4 mt-6">
-                <Button
-                  label="Back to Home"
-                  type="l"
-                  link="/index"
-                  className="w-full py-5"
-                />
-              </div>
             </div>
           </div>
         )}
@@ -725,11 +729,11 @@ export default function Game() {
             <div className=" mt-10 flex justify-between px-4 text-center uppercase">
               <div className="bg-primary text-black p-3 rounded-2xl w-20">
                 <div>token</div>
-                <div>{userInfo?.total_token}</div>
+                <div>{user?.total_token}</div>
               </div>
               <div className="bg-primary text-black p-3 rounded-2xl w-20">
                 <div>score</div>
-                <div>{userInfo?.score}</div>
+                <div>{user?.score}</div>
               </div>
             </div>
             <div className="fixed left-4 right-4 bottom-24 flex justify-center items-center">

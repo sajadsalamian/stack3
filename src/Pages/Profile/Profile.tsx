@@ -20,9 +20,32 @@ export default function Profile() {
     if (ethereum.isConnected()) {
       setAccount(ethereum.selectedAddress);
     }
-    setUser(JSON.parse(localStorage.getItem("user")!));
-    console.log(JSON.parse(localStorage.getItem("user")!));
+    FetchUser();
   }, []);
+
+  const FetchUser = () => {
+    let userInfo1 = JSON.parse(localStorage.getItem("user"));
+    let postData = {
+      user_id: "" + userInfo1.user_id,
+      user_name: userInfo1.user_name,
+    };
+    axios({
+      method: "post",
+      url: import.meta.env.VITE_API_URL + "/user",
+      data: postData,
+    })
+      .then((res) => {
+        console.log("Axios user fetch res", res);
+        setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+      })
+      .catch((err) => {
+        console.log("Fetch user Data Error:", err);
+        if (err.response) {
+          console.log("Fetch user Data Error Response:", err.response);
+        }
+      });
+  };
 
   const { ethereum } = new WalletTgSdk({
     injected: true, // default: false
@@ -78,27 +101,6 @@ export default function Profile() {
     console.log(ethereum.isConnected());
   };
 
-  const SignWallet = async () => {
-    const signature = await ethereum.request({
-      method: "personal_sign",
-      params: ["Hello, All!", account],
-    });
-    console.log(signature);
-    setSignature(signature);
-  };
-
-  const ChangeChain = async () => {
-    console.log("ChangeChain");
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xcc" }],
-      });
-    } catch (switchError) {
-      console.log("switchError", switchError);
-    }
-  };
-
   const BuyToken = async () => {
     if (tokenCount < 1) {
       Toast("w", "Please enter number more than 0");
@@ -123,7 +125,6 @@ export default function Profile() {
         method: "eth_sendTransaction",
         params: [transactionParameters],
       });
-
       console.log("Transaction sent:", txHash);
 
       let postData = {
@@ -136,15 +137,7 @@ export default function Profile() {
         .then((res) => {
           console.log(res.data[0]);
           if (!res.data[0].error) {
-            Toast("s", "Wallet Address Update Successfully.");
-            setUser({ ...user, total_token: user.total_token + tokenCount });
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                ...user,
-                total_token: Number(user.total_token) + Number(tokenCount),
-              })
-            );
+            Toast("s", "Tokens Update Successfully.");
           } else {
             Toast("e", res.data[0].message);
           }
@@ -154,9 +147,7 @@ export default function Profile() {
         });
       setLoadingBuy(false);
       Toast("success", "You Charge Successfully");
-
-      user.total_token = +user.total_token + +tokenCount;
-      localStorage.setItem("user", JSON.stringify(user));
+      FetchUser();
     } catch (error: any) {
       console.log("Failed to send transaction:", error);
       let message = "error on transaction";
@@ -241,7 +232,9 @@ export default function Profile() {
           </>
         ) : (
           <div>
-            <p className="text-white mb-2 uppercase">Please connect wallet to buy tokens.</p>
+            <p className="text-white mb-2 uppercase">
+              Please connect wallet to buy tokens.
+            </p>
             <Button
               label="Connect Wallet"
               onClick={ConnectToWallet}

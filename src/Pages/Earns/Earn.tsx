@@ -11,9 +11,35 @@ export default function Earn() {
   const [doneTask, setDoneTask]: any[] = useState([]);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")!));
-    console.log(JSON.parse(localStorage.getItem("user")!));
-    let avt = JSON.parse(localStorage.getItem("user")!).available_tasks;
+    let userInfo1 = JSON.parse(localStorage.getItem("user"));
+    let postData = {
+      user_id: "" + userInfo1.user_id,
+      user_name: userInfo1.user_name,
+    };
+    axios({
+      method: "post",
+      url: import.meta.env.VITE_API_URL + "/user",
+      data: postData,
+    })
+      .then((res) => {
+        console.log("Axios user fetch res", res);
+        setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+      })
+      .catch((err) => {
+        console.log("Fetch user Data Error:", err);
+        if (err.response) {
+          console.log("Fetch user Data Error Response:", err.response);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    if (user == null || user.user_id == null) {
+      return;
+    }
+    console.log("user", user);
+    let avt = user.available_tasks;
     avt.forEach(
       (element: {
         isDone: boolean;
@@ -24,12 +50,25 @@ export default function Earn() {
         element.isDone = false;
         element.isClaim = false;
         element.isLoading = false;
-        element.icon = "line-md:twitter-x";
+        switch (element.task_type) {
+          case "binance":
+            element.icon = "token:binance-smart-chain";
+            break;
+          case "telegram":
+            element.icon = "ic:baseline-telegram";
+            break;
+          case "uxuy":
+            element.icon = "tabler:ux-circle";
+            break;
+          default:
+            element.icon = "line-md:twitter-x";
+            break;
+        }
       }
     );
     setAvailableTask(avt);
 
-    let dt = JSON.parse(localStorage.getItem("user")!).done_tasks;
+    let dt = user.done_tasks;
     if (dt != null) {
       dt.forEach(
         (element: {
@@ -41,12 +80,25 @@ export default function Earn() {
           element.isDone = true;
           element.isLoading = false;
           element.isClaim = false;
-          element.icon = "line-md:twitter-x";
+          switch (element.task_type) {
+            case "binance":
+              element.icon = "token:binance-smart-chain";
+              break;
+            case "telegram":
+              element.icon = "ic:baseline-telegram";
+              break;
+            case "uxuy":
+              element.icon = "tabler:ux-circle";
+              break;
+            default:
+              element.icon = "line-md:twitter-x";
+              break;
+          }
         }
       );
     }
     setDoneTask(dt);
-  }, []);
+  }, [user]);
 
   const EarnClick = (item: any) => {
     !item.isClaim ? OpenUrl(item) : ClaimTask();
@@ -107,7 +159,9 @@ export default function Earn() {
   return (
     <Main>
       <HeadMeta title="Earn more token" />
-      <h2 className="text-white font-bold text-center my-2 mx-8">Complete the below task to get free tokens</h2>
+      <h2 className="text-white font-bold text-center my-2 mx-8">
+        Complete the below task to get free tokens
+      </h2>
       <div className=" p-2">
         {availableTask.map((item: any, index: number) => (
           <div

@@ -1,6 +1,10 @@
 import { Icon } from "@iconify/react";
 import { toast, ToastOptions } from "react-toastify";
 import { twMerge } from "tailwind-merge";
+import axios from "axios";
+import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AnimationVariants = (
   type: string = "y",
