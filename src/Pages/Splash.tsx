@@ -13,7 +13,11 @@ export default function Splash() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let userData = { user_id: 50, user_name: "test50" };
+    let userData = {
+      user_id: "" + 7543953888,
+      user_name: "boobby2",
+      initial_token: 3,
+    };
 
     try {
       setIsTelegram(true);
@@ -22,7 +26,7 @@ export default function Splash() {
       setInitDataRaw(initDataRaw);
       console.log("initData", initData?.user);
       userData = {
-        user_id: initData?.user.id,
+        user_id: "" + initData?.user.id,
         user_name: initData?.user.username,
         initial_token: 3,
       };
@@ -33,7 +37,7 @@ export default function Splash() {
 
     axios({
       method: "post",
-      responseType: 'json',
+      responseType: "json",
       url: import.meta.env.VITE_API_URL + "/user",
       data: userData,
     })
