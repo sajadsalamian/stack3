@@ -7,7 +7,7 @@ export default function Intro() {
       <div className="flex flex-col justify-center items-center pb-10 h-full">
         <div className="grow flex flex-col justify-center items-center">
           <img src={splash} alt="" className="" />
-          <p className="text-white text-center px-2">
+          <p className="text-white text-center px-2 text-2xl">
             Players purchase tokens to join the game. Campaigns start every
             Saturday at 12:00 UTC, and at the end of each cycle, the total token
             revenue is distributed: 1st rank gets 50%, 2nd rank gets 30%, and

@@ -9,8 +9,8 @@ export default function Splash() {
 
   useEffect(() => {
     let userData = {
-      user_id: "" + 7543953888,
-      user_name: "boobby2",
+      user_id: "" + 7543953222,
+      user_name: "test884565454",
       initial_token: 3,
     };
 
@@ -34,7 +34,6 @@ export default function Splash() {
     })
       .then((res) => {
         console.log("Axios user fetch res", res);
-        // res.data.photo_url = initData?.user.photoUrl;
         localStorage.setItem("user", JSON.stringify(res.data));
         navigate("/intro");
         return JSON.stringify(res.data);
