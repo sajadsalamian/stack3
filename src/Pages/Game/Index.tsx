@@ -608,20 +608,20 @@ export default function Game() {
     setScore(score);
     setGaming(null);
     setShowMenu(true);
-    if (Number(score) <= Number(userInfo.score)) {
+    if (Number(score) <= Number(user.score)) {
       return;
     }
-    let postData = { user_id: userInfo.user_id, score: Number(score) };
+    let postData = { user_id: user.user_id, score: Number(score) };
     axios
       .post(import.meta.env.VITE_API_URL + "/submit_score", postData)
       .then((res) => {
         console.log("user fetch res", res.data[0]);
-        setUserInfo({ ...userInfo, score: score });
-        localStorage.setItem("user", JSON.stringify(userInfo));
+        setUser({ ...user, score: score });
+        localStorage.setItem("user", JSON.stringify(user));
       })
       .catch((err) => {
-        setUserInfo({ ...userInfo, score: score });
-        localStorage.setItem("user", JSON.stringify(userInfo));
+        setUser({ ...user, score: score });
+        localStorage.setItem("user", JSON.stringify(user));
         console.log("UpdateScore", err);
       });
   };
@@ -658,7 +658,7 @@ export default function Game() {
       console.log("Transaction sent:", txHash);
 
       let postData = {
-        user_id: userInfo.user_id,
+        user_id: user.user_id,
         token_amount: Number(tokenCount),
         hash: txHash,
       };
