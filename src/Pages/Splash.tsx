@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import splash from "../assets/images/splash.png";
 import axios from "axios";
+import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
 
 export default function Splash() {
   const navigate = useNavigate();
