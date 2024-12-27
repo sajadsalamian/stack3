@@ -3,11 +3,12 @@ import Main, { HeadMeta } from "../../components/Layouts/Main/Main";
 import Button from "../../components/Elements/Button";
 import * as THREE from "three";
 import axios from "axios";
-import { FetchUser, Toast } from "../../components/Layouts/Main/Helper";
+import { Toast } from "../../components/Layouts/Main/Helper";
 import { RotatingLines } from "react-loader-spinner";
 import gameBack from "../../assets/images/game_back.png";
 import Input from "../../components/Elements/Input";
 import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
+import splash from "../../assets/images/splash.png";
 
 export default function Game() {
   const [user, setUser]: any = useState(null);
@@ -15,6 +16,7 @@ export default function Game() {
   const [loadingGame, setLoadingGame] = useState(false);
   const [gaming, setGaming]: any = useState(null);
   const [score, setScore]: any = useState(null);
+  const [showScore, setShowScore] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +24,7 @@ export default function Game() {
   const [loadingBuy, setLoadingBuy] = useState(false); // duplicate variable
 
   useEffect(() => {
-    let userInfo1 = JSON.parse(localStorage.getItem("user"));
+    let userInfo1 = JSON.parse(localStorage.getItem("user")!);
     let postData = {
       user_id: "" + userInfo1.user_id,
       user_name: userInfo1.user_name,
@@ -403,8 +405,8 @@ export default function Game() {
 
       this.mainContainer = document.getElementById("container");
       this.scoreContainer = document.getElementById("score");
-      this.startButton = document.getElementById("start-button");
-      this.instructions = document.getElementById("instructions");
+      // this.startButton = document.getElementById("start-button");
+      // this.instructions = document.getElementById("instructions");
       this.scoreContainer.innerHTML = "0";
 
       this.newBlocks = new THREE.Group();
@@ -445,7 +447,7 @@ export default function Game() {
           this.placeBlock();
           break;
         case this.STATES.ENDED:
-          this.restartGame();
+          // this.restartGame();
           break;
       }
     }
@@ -456,45 +458,6 @@ export default function Game() {
         this.updateState(this.STATES.PLAYING);
         this.addBlock();
       }
-    }
-
-    restartGame() {
-      this.updateState(this.STATES.RESETTING);
-
-      let oldBlocks = this.placedBlocks.children;
-      let removeSpeed = 0.2;
-      let delayAmount = 0.02;
-      for (let i = 0; i < oldBlocks.length; i++) {
-        TweenLite.to(oldBlocks[i].scale, removeSpeed, {
-          x: 0,
-          y: 0,
-          z: 0,
-          delay: (oldBlocks.length - i) * delayAmount,
-          ease: Power1.easeIn,
-          onComplete: () => this.placedBlocks.remove(oldBlocks[i]),
-        });
-        TweenLite.to(oldBlocks[i].rotation, removeSpeed, {
-          y: 0.5,
-          delay: (oldBlocks.length - i) * delayAmount,
-          ease: Power1.easeIn,
-        });
-      }
-      let cameraMoveSpeed = removeSpeed * 2 + oldBlocks.length * delayAmount;
-      this.stage.setCamera(2, cameraMoveSpeed);
-
-      let countdown = { value: this.blocks.length - 1 };
-      TweenLite.to(countdown, cameraMoveSpeed, {
-        value: 0,
-        onUpdate: () => {
-          this.scoreContainer.innerHTML = String(Math.round(countdown.value));
-        },
-      });
-
-      this.blocks = this.blocks.slice(0, 1);
-
-      setTimeout(() => {
-        StartGame();
-      }, cameraMoveSpeed * 1000);
     }
 
     placeBlock() {
@@ -554,12 +517,10 @@ export default function Game() {
 
       this.stage.setCamera(this.blocks.length * 2);
 
-      if (this.blocks.length >= 5) this.instructions.classList.add("hide");
+      // if (this.blocks.length >= 5) this.instructions.classList.add("hide");
     }
 
     endGame() {
-      // if(this.)
-      // setIsStart(false);
       this.updateState(this.STATES.ENDED);
       UpdateScore(this.scoreContainer.innerHTML);
     }
@@ -584,7 +545,6 @@ export default function Game() {
         setLoadingGame(false);
         if (!res.data[0].error) {
           setIsStart(true);
-          setLoadingGame(false);
         } else {
           setIsStart(false);
           setShowMenu(true);
@@ -605,8 +565,10 @@ export default function Game() {
 
   const UpdateScore = (score: number) => {
     setScore(score);
+    setShowScore(true);
     setGaming(null);
     setShowMenu(true);
+    setIsStart(false);
     if (Number(score) <= Number(user.score)) {
       return;
     }
@@ -711,12 +673,6 @@ export default function Game() {
           <div id="container">
             <div id="game"></div>
             <div id="score">0</div>
-            <div className="game-over text-center">
-              {/* <p className="text-sm">Game Over</p> */}
-              <p className="text-sm">Your Weekly Best Score : {user?.score}</p>
-              <p>Token Remain: {user?.total_token}</p>
-              <p>Tab anywhere to start</p>
-            </div>
           </div>
         )}
 
@@ -726,7 +682,7 @@ export default function Game() {
             className="fixed top-0 bottom-0 right-0 left-0 bg-contain"
           >
             <div className=" mt-10 flex justify-between px-4 text-center uppercase">
-              <div className="bg-primary text-black p-3 rounded-2xl w-20">
+              <div className="bg-primary text-black p-3 rounded-2xl w-20 cursor-pointer" onClick={() => setShowModal(true)}>
                 <div>token</div>
                 <div>{user?.total_token}</div>
               </div>
@@ -748,7 +704,6 @@ export default function Game() {
                 <div className="flex justify-center items-center">
                   <RotatingLines
                     visible={true}
-                    height="24"
                     width="24"
                     strokeWidth="5"
                     animationDuration="0.75"
@@ -761,6 +716,36 @@ export default function Game() {
           </div>
         )}
       </div>
+
+      {showScore && (
+        <div className="fixed top-0 bottom-0 left-0 right-0 bg-black/60 z-[1000]">
+          <div
+            className="w-full h-full"
+            onClick={() => setShowScore(false)}
+          ></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-4">
+            <div
+              className="w-60 mx-auto pt-4 pb-12 rounded-3xl h-80 bg-cover"
+              style={{ backgroundImage: `url(${splash})` }}
+            >
+              <div className="flex flex-col items-center">
+                <div
+                  className="bg-primary rounded-full w-8 h-8 p-2 text-center absolute top-5 right-5 flex justify-center items-center cursor-pointer"
+                  onClick={() => setShowScore(false)}
+                >
+                  X
+                </div>
+                <h2 className="text-primary mb-6 text-3xl">Game Over</h2>
+                <p className="text-2xl text-white mb-2">Score : {score}</p>
+                <p className="text-xl text-white">
+                  Your Weekly Best Score : {user?.score}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showModal && (
         <div className="fixed top-0 bottom-0 left-0 right-0 bg-black/60 z-[1000]">
           <div
@@ -785,7 +770,6 @@ export default function Game() {
                 <div className="flex justify-center items-center">
                   <RotatingLines
                     visible={true}
-                    height="24"
                     width="24"
                     strokeWidth="5"
                     animationDuration="0.75"

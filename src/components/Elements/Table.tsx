@@ -18,8 +18,11 @@ export default function Table({ headers = [], data = [] }) {
           </tr>
         </thead>
         <tbody className="text-gray-700">
-          {data.map((item, index) => (
-            <tr className="bg-[#666666] text-white border-b-4 border-dark-black rounded-lg">
+          {data.map((item: { isSelf: String }, index) => (
+            <tr
+              className="bg-[#666666] text-white border-b-4 border-dark-black rounded-lg"
+              key={index}
+            >
               <td
                 className={`text-center py-3 px-4 text-sm text-black ${
                   item.isSelf == "1" && "font-bold"
@@ -27,19 +30,15 @@ export default function Table({ headers = [], data = [] }) {
               >
                 {index + 1}
               </td>
-              {headers.map((head: String, index: Key) => (
-                <td className={`text-center py-3 px-4 text-sm`} key={index}>
-                  {head.includes("image") ? (
-                    <img
-                      src={item[head]}
-                      className="w-16 h-16 rounded-full object-cover"
-                      alt="بدون تصویر"
-                    />
-                  ) : (
-                    <span className={item.isSelf == "1" && "font-bold text-primary"}>
-                      {item[head]}
-                    </span>
-                  )}
+              {headers.map((head: String, index1: Key) => (
+                <td className={`text-center py-3 px-4 text-sm`} key={index1}>
+                  <span
+                    className={
+                      item.isSelf == "1" ? "font-bold text-primary" : ""
+                    }
+                  >
+                    {item[head]}
+                  </span>
                 </td>
               ))}
             </tr>
