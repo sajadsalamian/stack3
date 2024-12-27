@@ -570,21 +570,26 @@ export default function Game() {
     setShowMenu(true);
     setIsStart(false);
     if (Number(score) <= Number(user.score)) {
-      return;
+      let userInfo1 = user;
+      userInfo1.total_token = user.total_token - 1;
+      setUser(userInfo1);
+      localStorage.setItem("user", JSON.stringify(userInfo1));
+    } else {
+      let postData = { user_id: user.user_id, score: Number(score) };
+      axios
+        .post(import.meta.env.VITE_API_URL + "/submit_score", postData)
+        .then((res) => {
+          console.log("user fetch res", res.data[0]);
+          let userInfo1 = user;
+          userInfo1.total_token = user.total_token - 1;
+          userInfo1.score = score;
+          setUser(userInfo1);
+          localStorage.setItem("user", JSON.stringify(userInfo1));
+        })
+        .catch((err) => {
+          console.log("UpdateScore", err);
+        });
     }
-    let postData = { user_id: user.user_id, score: Number(score) };
-    axios
-      .post(import.meta.env.VITE_API_URL + "/submit_score", postData)
-      .then((res) => {
-        console.log("user fetch res", res.data[0]);
-        setUser({ ...user, score: score });
-        localStorage.setItem("user", JSON.stringify(user));
-      })
-      .catch((err) => {
-        setUser({ ...user, score: score });
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log("UpdateScore", err);
-      });
   };
 
   const { ethereum } = new WalletTgSdk({
@@ -682,7 +687,10 @@ export default function Game() {
             className="fixed top-0 bottom-0 right-0 left-0 bg-contain"
           >
             <div className=" mt-10 flex justify-between px-4 text-center uppercase">
-              <div className="bg-primary text-black p-3 rounded-2xl w-20 cursor-pointer" onClick={() => setShowModal(true)}>
+              <div
+                className="bg-primary text-black p-3 rounded-2xl w-20 cursor-pointer"
+                onClick={() => setShowModal(true)}
+              >
                 <div>token</div>
                 <div>{user?.total_token}</div>
               </div>
