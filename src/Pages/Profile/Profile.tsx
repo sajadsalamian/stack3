@@ -6,6 +6,7 @@ import { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 import Input from "../../components/Elements/Input";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function Profile() {
   const [user, setUser]: any = useState({});
@@ -166,7 +167,9 @@ export default function Profile() {
       <HeadMeta title="Profile" />
       <div className="mb-5 pt-5">
         <div className="text-center flex flex-col items-center mt-10">
-          <div className="h-20 w-36 bg-primary rounded-tl-full rounded-tr-full mb-2"></div>
+          <div className="h-20 w-36 bg-primary rounded-tl-full rounded-tr-full mb-2 flex justify-center items-center">
+            <Icon icon="icon-park-outline:game-ps" width="32" height="32" />
+          </div>
           <div className="mb-2 bg-primary w-36 text-2xl rounded-lg">
             {user.user_name}
           </div>
@@ -180,7 +183,9 @@ export default function Profile() {
               <div>{user?.score}</div>
             </div>
           </div>
-          <div className="h-20 w-36 bg-primary rounded-bl-full rounded-br-full mt-2"></div>
+          <div className="h-20 w-36 bg-primary rounded-bl-full rounded-br-full mt-2 flex justify-center items-center">
+            <Icon icon="icon-park-outline:game-ps" width="32" height="32" />
+          </div>
         </div>
       </div>
       <div className="p-2  text-center  overflow-hidden mb-10">
