@@ -198,6 +198,7 @@ export default function Earn() {
                   animationDuration="0.75"
                   ariaLabel="rotating-lines-loading"
                   wrapperClass="ml-5"
+                  strokeColor="yellow"
                 />
               )}
             </div>

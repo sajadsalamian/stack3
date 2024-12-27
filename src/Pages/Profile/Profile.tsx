@@ -218,6 +218,7 @@ export default function Profile() {
                     strokeWidth="5"
                     animationDuration="0.75"
                     ariaLabel="rotating-lines-loading"
+                    strokeColor="yellow"
                   />
                 </div>
               )}

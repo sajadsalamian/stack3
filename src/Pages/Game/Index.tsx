@@ -420,11 +420,7 @@ export default function Game() {
 
       this.updateState(this.STATES.READY);
 
-      // document.addEventListener("keydown", (e) => {
-      //   if (e.keyCode == 32) this.onAction();
-      // });
-
-      document.addEventListener("click", (e) => {
+      document.addEventListener("click", () => {
         this.onAction();
       });
 
@@ -433,7 +429,7 @@ export default function Game() {
       });
     }
 
-    updateState(newState) {
+    updateState(newState: any) {
       for (let key in this.STATES)
         this.mainContainer.classList.remove(this.STATES[key]);
       this.mainContainer.classList.add(newState);
@@ -497,7 +493,7 @@ export default function Game() {
       this.blocks = this.blocks.slice(0, 1);
 
       setTimeout(() => {
-        this.startGame();
+        StartGame();
       }, cameraMoveSpeed * 1000);
     }
 
@@ -577,8 +573,7 @@ export default function Game() {
     }
   }
 
-  const StartGame = (string: string) => {
-    console.log("start game", string);
+  const StartGame = () => {
     setLoadingGame(true);
     setShowMenu(false);
     let postData = { user_id: user.user_id };
@@ -594,6 +589,10 @@ export default function Game() {
           setIsStart(false);
           setShowMenu(true);
           Toast("error", "You don't have any token to play a game.");
+          let userInfo1 = JSON.parse(localStorage.getItem("user")!);
+          userInfo1.total_token = 0;
+          setUser(userInfo1);
+          localStorage.setItem("user", JSON.stringify(userInfo1));
           setShowModal(true);
         }
       })
@@ -741,7 +740,7 @@ export default function Game() {
                 <div className="flex gap-2 w-full">
                   <Button
                     label="Start Game"
-                    onClick={() => StartGame("sds")}
+                    onClick={() => StartGame()}
                     className="w-full"
                   />
                 </div>
@@ -754,6 +753,7 @@ export default function Game() {
                     strokeWidth="5"
                     animationDuration="0.75"
                     ariaLabel="rotating-lines-loading"
+                    strokeColor="yellow"
                   />
                 </div>
               )}
@@ -790,6 +790,7 @@ export default function Game() {
                     strokeWidth="5"
                     animationDuration="0.75"
                     ariaLabel="rotating-lines-loading"
+                    strokeColor="yellow"
                   />
                 </div>
               )}
