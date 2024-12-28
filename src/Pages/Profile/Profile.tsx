@@ -115,7 +115,7 @@ export default function Profile() {
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
       const transactionParameters = {
-        to: "0xaddbc186a3902392aa6c19908197ba80f654adf9",
+        to: "0xaDDBc186a3902392aa6c19908197BA80F654Adf9",
         from: accounts[0],
         value: tokenCount * (0.001 * 10 ** 18),
         chainId: "0xcc",
