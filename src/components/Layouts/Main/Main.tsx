@@ -31,7 +31,7 @@ export function HeadMeta({
   return (
     <Helmet>
       {/* Standard metadata tags */}
-      <title>{title} - Stack3</title>
+      <title>{title} - NITRO W3</title>
       <link rel="canonical" href={window.location.href} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />

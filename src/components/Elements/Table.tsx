@@ -20,12 +20,12 @@ export default function Table({ headers = [], data = [] }) {
         <tbody className="text-gray-700">
           {data.map((item: { isSelf: String }, index) => (
             <tr
-              className="bg-[#666666] text-white border-b-4 border-dark-black rounded-lg"
+              className={`bg-[#666666] text-white border-b-4 border-dark-black rounded-lg`}
               key={index}
             >
               <td
-                className={`text-center py-3 px-4 text-sm text-black ${
-                  item.isSelf == "1" && "font-bold"
+                className={`text-center py-3 px-4 text-sm ${
+                  item.isSelf == "1" ? "text-primary font-bold" : "text-white"
                 }`}
               >
                 {index + 1}

@@ -207,6 +207,7 @@ export default function Profile() {
                 onChange={(e: { target: { value: SetStateAction<number> } }) =>
                   setTokenCount(e.target.value)
                 }
+                type="number"
                 error={undefined}
                 label="Number of token"
                 value={tokenCount}
