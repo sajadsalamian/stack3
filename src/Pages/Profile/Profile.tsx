@@ -11,7 +11,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 export default function Profile() {
   const [user, setUser]: any = useState({});
   const [account, setAccount] = useState("");
-  const [, setSignature] = useState("");
+  const [loadUser, setLoadUser] = useState(false);
 
   const [tokenCount, setTokenCount] = useState(0);
   const [loadingBuy, setLoadingBuy] = useState(false); // duplicate variable
@@ -23,6 +23,13 @@ export default function Profile() {
     }
     FetchUser();
   }, []);
+
+  useEffect(() => {
+    console.log("user load");
+    if (user.user_id != null) {
+      setLoadUser(true);
+    }
+  }, [user]);
 
   const FetchUser = () => {
     let userInfo1 = JSON.parse(localStorage.getItem("user"));
@@ -58,6 +65,7 @@ export default function Profile() {
       method: "eth_requestAccounts",
     });
     setAccount(accounts[0]);
+    SignWallet();
 
     let postData = { user_id: user.user_id, wallet_address: accounts[0] };
     axios
@@ -80,6 +88,45 @@ export default function Profile() {
       });
   };
 
+  const SignWallet = async () => {
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    try {
+      const signature = await ethereum.request({
+        method: "personal_sign",
+        params: ["Welcome to NITRO W3!", accounts[0]],
+      });
+      console.log(signature);
+
+      let postData = { user_id: user.user_id, sign: signature };
+      axios
+        .post(import.meta.env.VITE_API_URL + "/submit_sign", postData)
+        .then((res) => {
+          console.log(res.data[0]);
+          if (!res.data[0].error) {
+            setUser({ ...user, sign: signature });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({ ...user, sign: signature })
+            );
+          } else {
+            Toast("e", res.data[0].message);
+          }
+        })
+        .catch((err) => {
+          console.log("Fetch user Data Error:", err);
+        });
+    } catch (error: any) {
+      console.log("Failed to send transaction:", error);
+      let message = "error on Sign";
+      switch (error.code) {
+        case 4001:
+          message = "Sign canceled by user.";
+          break;
+      }
+      Toast("error", message);
+    }
+  };
+
   const DisconnectWallet = () => {
     ethereum.disconnect();
     let postData = { user_id: user.user_id, wallet_address: "" };
@@ -98,6 +145,26 @@ export default function Profile() {
       .catch((err) => {
         console.log("Fetch user Data Error:", err);
       });
+
+    let postData1 = { user_id: user.user_id, sign: "" };
+    axios
+      .post(import.meta.env.VITE_API_URL + "/submit_sign", postData1)
+      .then((res) => {
+        console.log(res.data[0]);
+        if (!res.data[0].error) {
+          Toast("s", "Wallet Address Update Successfully.");
+          setUser({ ...user, sign: null });
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ ...user, sign: null })
+          );
+        } else {
+          Toast("e", res.data[0].message);
+        }
+      })
+      .catch((err) => {
+        console.log("Fetch user Data Error:", err);
+      });
     console.log("wallet Dc");
     console.log(ethereum.isConnected());
   };
@@ -105,6 +172,10 @@ export default function Profile() {
   const BuyToken = async () => {
     if (tokenCount < 1) {
       Toast("w", "Please enter number more than 0");
+      return;
+    }
+    if (user.sign == null) {
+      SignWallet();
       return;
     }
     try {
@@ -202,33 +273,46 @@ export default function Profile() {
                   )}
               </p>
             )}
-            <div className="w-40 mx-auto">
-              <Input
-                onChange={(e: { target: { value: SetStateAction<number> } }) =>
-                  setTokenCount(e.target.value)
-                }
-                type="number"
-                error={undefined}
-                label="Number of token"
-                value={tokenCount}
-                onBlur={undefined}
-              />
-              {!loadingBuy ? (
-                <Button label="Buy Token" onClick={BuyToken} className="mb-5" />
-              ) : (
-                <div className="flex justify-center items-center">
-                  <RotatingLines
-                    visible={true}
-                    height="24"
-                    width="24"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    ariaLabel="rotating-lines-loading"
-                    strokeColor="yellow"
-                  />
-                </div>
-              )}
-            </div>
+
+            {loadUser && (
+              <div className="w-40 mx-auto">
+                {user.sign != null && user.sign.length > 10 ? (
+                  <>
+                    <Input
+                      onChange={(e: {
+                        target: { value: SetStateAction<number> };
+                      }) => setTokenCount(e.target.value)}
+                      type="number"
+                      error={undefined}
+                      label="Number of token"
+                      value={tokenCount}
+                      onBlur={undefined}
+                    />
+                    {!loadingBuy ? (
+                      <Button
+                        label="Buy Token"
+                        onClick={BuyToken}
+                        className="mb-5"
+                      />
+                    ) : (
+                      <div className="flex justify-center items-center">
+                        <RotatingLines
+                          visible={true}
+                          height="24"
+                          width="24"
+                          strokeWidth="5"
+                          animationDuration="0.75"
+                          ariaLabel="rotating-lines-loading"
+                          strokeColor="yellow"
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Button label="Sign" onClick={SignWallet} className="mb-5" />
+                )}
+              </div>
+            )}
             <div className="mb-10 flex gap-4 justify-center">
               <Button
                 label="Disconnect Wallet"
