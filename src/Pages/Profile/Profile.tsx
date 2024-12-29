@@ -154,10 +154,7 @@ export default function Profile() {
         if (!res.data[0].error) {
           Toast("s", "Wallet Address Update Successfully.");
           setUser({ ...user, sign: null });
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ ...user, sign: null })
-          );
+          localStorage.setItem("user", JSON.stringify({ ...user, sign: null }));
         } else {
           Toast("e", res.data[0].message);
         }
@@ -185,11 +182,41 @@ export default function Profile() {
       });
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      let ABI: [
+        {
+          type: "constructor";
+          inputs: [];
+          stateMutability: "nonpayable";
+        },
+        {
+          type: "function";
+          name: "buyGameToken";
+          inputs: [];
+          outputs: [];
+          stateMutability: "payable";
+        },
+        {
+          type: "function";
+          name: "deployer";
+          inputs: [];
+          outputs: [
+            {
+              name: "";
+              type: "address";
+              internalType: "address";
+            }
+          ];
+          stateMutability: "view";
+        }
+      ];
+
       const transactionParameters = {
         to: "0xaDDBc186a3902392aa6c19908197BA80F654Adf9",
         from: accounts[0],
         value: tokenCount * (0.001 * 10 ** 18),
         chainId: "0xcc",
+        data: "0xed60ade600000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001",
       };
 
       setLoadingBuy(true);
