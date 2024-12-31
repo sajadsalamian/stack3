@@ -73,7 +73,6 @@ export default function Profile() {
       .then((res) => {
         console.log(res.data[0]);
         if (!res.data[0].error) {
-          Toast("s", "Wallet Address Update Successfully.");
           setUser({ ...user, wallet_address: accounts[0] });
           localStorage.setItem(
             "user",
@@ -91,6 +90,11 @@ export default function Profile() {
   const SignWallet = async () => {
     const accounts = await ethereum.request({ method: "eth_accounts" });
     try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xcc" }],
+      });
+
       const signature = await ethereum.request({
         method: "personal_sign",
         params: ["Welcome to NITRO W3!", accounts[0]],
@@ -135,7 +139,6 @@ export default function Profile() {
       .then((res) => {
         console.log(res.data[0]);
         if (!res.data[0].error) {
-          Toast("w", "Wallet Disconnected.");
           setUser({ ...user, wallet_address: "" });
           localStorage.setItem("user", JSON.stringify(user));
         } else {
@@ -152,7 +155,6 @@ export default function Profile() {
       .then((res) => {
         console.log(res.data[0]);
         if (!res.data[0].error) {
-          Toast("s", "Wallet Address Update Successfully.");
           setUser({ ...user, sign: null });
           localStorage.setItem("user", JSON.stringify({ ...user, sign: null }));
         } else {
@@ -183,45 +185,64 @@ export default function Profile() {
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
 
-      let ABI: [
-        {
-          type: "constructor";
-          inputs: [];
-          stateMutability: "nonpayable";
-        },
-        {
-          type: "function";
-          name: "buyGameToken";
-          inputs: [];
-          outputs: [];
-          stateMutability: "payable";
-        },
-        {
-          type: "function";
-          name: "deployer";
-          inputs: [];
-          outputs: [
-            {
-              name: "";
-              type: "address";
-              internalType: "address";
-            }
-          ];
-          stateMutability: "view";
-        }
-      ];
+      // let ABI: [
+      //   {
+      //     type: "constructor";
+      //     inputs: [];
+      //     stateMutability: "nonpayable";
+      //   },
+      //   {
+      //     type: "function";
+      //     name: "buyGameToken";
+      //     inputs: [];
+      //     outputs: [];
+      //     stateMutability: "payable";
+      //   },
+      //   {
+      //     type: "function";
+      //     name: "deployer";
+      //     inputs: [];
+      //     outputs: [
+      //       {
+      //         name: "";
+      //         type: "address";
+      //         internalType: "address";
+      //       }
+      //     ];
+      //     stateMutability: "view";
+      //   }
+      // ];
 
-      //0xa9059cbb
+      // let gasPrice = await ethereum.request({
+      //   method: "eth_gasPrice",
+      //   params: [],
+      // });
 
       const transactionParameters = {
-        // to: "0xaDDBc186a3902392aa6c19908197BA80F654Adf9",
-        from: accounts[0],
-        value: tokenCount * (0.001 * 10 ** 18),
         chainId: "0xcc",
-        data: "0xa9059cbb00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001",
+        // to: "0xaDDBc186a3902392aa6c19908197BA80F654Adf9",
+        to: "0x2862F52E80A1dD47e479A303caB4E2b9eF201aE8",
+        // nonce: '0x00',
+        from: accounts[0],
+        // gas: "0x8",
+        // gasPrice: gasPrice,
+        value: tokenCount * (0.0001 * 10 ** 18),
+        data: "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
+        // data: "0xa9059cbb00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001",
 
         // data: "0xed60ade600000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001",
       };
+
+      // {
+      //   "chainId": 57073,
+      //   "data": "0xd0e30db0",
+      //   "from": "0x5ce90260f6c3cf49e6af276727d476d3193397f6",
+      //   "gas": "0x10980",
+      //   "gasPrice": "0x1250ae",
+      //   "nonce": "0x0",
+      //   "to": "0x4200000000000000000000000000000000000006",
+      //   "value": "0x5af3107a4000"
+      // }
 
       setLoadingBuy(true);
       const txHash = await ethereum.request({
@@ -240,7 +261,6 @@ export default function Profile() {
         .then((res) => {
           console.log(res.data[0]);
           if (!res.data[0].error) {
-            Toast("s", "Tokens Update Successfully.");
           } else {
             Toast("e", res.data[0].message);
           }
@@ -249,7 +269,7 @@ export default function Profile() {
           console.log("Fetch user Data Error:", err);
         });
       setLoadingBuy(false);
-      Toast("success", "You Charge Successfully");
+      Toast("success", "Tokens Added to Your Profile.");
       FetchUser();
     } catch (error: any) {
       console.log("Failed to send transaction:", error);
